@@ -1,9 +1,40 @@
 import {
-    Card,
-    CardContent,
-    Grid,
+    Box,
+    Divider,
+    Stack,
     Typography
 } from "@mui/material";
+
+function Metric({ label, value }) {
+
+    return (
+
+        <Box
+            sx={{
+                minWidth: 90
+            }}>
+
+            <Typography
+                variant="caption"
+                color="text.secondary">
+
+                {label}
+
+            </Typography>
+
+            <Typography
+                variant="h6"
+                fontWeight={600}>
+
+                {value}
+
+            </Typography>
+
+        </Box>
+
+    );
+
+}
 
 export default function SummaryCard({
 
@@ -11,74 +42,107 @@ export default function SummaryCard({
 
     totalMatches,
 
-    multiTimeframeMatches
+    multiTimeframeMatches,
+
+    performance
 
 }) {
 
     return (
 
-        <Card sx={{ mb: 3 }}>
+        <Stack
 
-            <CardContent>
+            direction="row"
 
-                <Grid container spacing={3}>
+            spacing={3}
 
-                    <Grid size={4}>
+            divider={<Divider orientation="vertical" flexItem />}
 
-                        <Typography
-                            variant="h3">
+            sx={{
 
-                            {symbolsScanned}
+                mt: 2,
 
-                        </Typography>
+                mb: 2,
 
-                        <Typography>
+                flexWrap: "wrap"
 
-                            Symbols
+            }}
 
-                        </Typography>
+        >
 
-                    </Grid>
+            <Metric
 
-                    <Grid size={4}>
+                label="Symbols"
 
-                        <Typography
-                            variant="h3">
+                value={symbolsScanned}
 
-                            {totalMatches}
+            />
 
-                        </Typography>
+            <Metric
 
-                        <Typography>
+                label="Matches"
 
-                            Matches
+                value={totalMatches}
 
-                        </Typography>
+            />
 
-                    </Grid>
+            <Metric
 
-                    <Grid size={4}>
+                label="Multi-TF"
 
-                        <Typography
-                            variant="h3">
+                value={multiTimeframeMatches}
 
-                            {multiTimeframeMatches}
+            />
 
-                        </Typography>
+            <Metric
 
-                        <Typography>
+                label="Download"
 
-                            Multi-Timeframe
+                value={
 
-                        </Typography>
+                    performance
 
-                    </Grid>
+                        ? `${performance.downloadSeconds.toFixed(1)} s`
 
-                </Grid>
+                        : "--"
 
-            </CardContent>
+                }
 
-        </Card>
+            />
+
+            <Metric
+
+                label="Scan"
+
+                value={
+
+                    performance
+
+                        ? `${performance.scanSeconds.toFixed(1)} s`
+
+                        : "--"
+
+                }
+
+            />
+
+            <Metric
+
+                label="Total"
+
+                value={
+
+                    performance
+
+                        ? `${performance.totalSeconds.toFixed(1)} s`
+
+                        : "--"
+
+                }
+
+            />
+
+        </Stack>
 
     );
 

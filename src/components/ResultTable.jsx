@@ -1,8 +1,13 @@
+import { useEffect, useMemo, useState } from "react";
+
 import {
-    Card,
-    CardContent,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
     Chip,
     Link,
+    Pagination,
+    Stack,
     Table,
     TableBody,
     TableCell,
@@ -11,7 +16,11 @@ import {
     Typography
 } from "@mui/material";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import { getBbColor } from "../utils/bbColor";
+
+const PAGE_SIZE = 10;
 
 export default function ResultTable({
 
@@ -21,168 +30,282 @@ export default function ResultTable({
 
 }) {
 
-    if (!results || results.length === 0) {
+    const [page, setPage] =
+        useState(1);
 
-        return (
+    useEffect(() => {
 
-            <Card sx={{ mt: 3 }}>
+        setPage(1);
 
-                <CardContent>
+    }, [results]);
+
+    const sortedResults = useMemo(() => {
+
+        return [...results].sort(
+
+            (a, b) =>
+
+                b.bbWidthPercent -
+
+                a.bbWidthPercent
+
+        );
+
+    }, [results]);
+
+    const pageCount = Math.ceil(
+
+        sortedResults.length /
+
+        PAGE_SIZE
+
+    );
+
+    const pagedResults = sortedResults.slice(
+
+        (page - 1) * PAGE_SIZE,
+
+        page * PAGE_SIZE
+
+    );
+
+    return (
+
+        <Accordion
+
+            defaultExpanded
+
+            sx={{
+
+                mt: 2
+
+            }}
+
+        >
+
+            <AccordionSummary
+
+                expandIcon={<ExpandMoreIcon />}
+
+            >
+
+                <Stack
+
+                    direction="row"
+
+                    justifyContent="space-between"
+
+                    alignItems="center"
+
+                    width="100%"
+
+                >
 
                     <Typography
-                        variant="h6"
-                        gutterBottom>
+
+                        fontWeight={600}
+
+                    >
 
                         {title}
 
                     </Typography>
 
-                    <Typography
-                        color="text.secondary">
+                    <Chip
 
-                        No matches found.
+                        label={`${results.length} Matches`}
 
-                    </Typography>
+                        size="small"
 
-                    <Typography
-                        variant="body2"
-                        color="text.secondary">
+                    />
 
-                        Try lowering the minimum BB Width.
+                </Stack>
 
-                    </Typography>
+            </AccordionSummary>
 
-                </CardContent>
+            <AccordionDetails>
 
-            </Card>
+                {
 
-        );
+                    results.length === 0 ?
 
-    }
+                        (
 
-    const sortedResults =
-        [...results].sort(
+                            <Typography
 
-            (a, b) =>
+                                color="text.secondary"
 
-                b.bbWidthPercent - a.bbWidthPercent
+                            >
 
-        );
+                                No matches found.
 
-    return (
+                            </Typography>
 
-        <Card sx={{ mt: 3 }}>
+                        )
 
-            <CardContent>
+                        :
 
-                <Typography
-                    variant="h6"
-                    gutterBottom>
+                        (
 
-                    {title}
+                            <>
 
-                </Typography>
+                                <Table
 
-                <Table>
+                                    size="small"
 
-                    <TableHead>
+                                    stickyHeader
 
-                        <TableRow>
+                                >
 
-                            <TableCell>
+                                    <TableHead>
 
-                                Coin
+                                        <TableRow>
 
-                            </TableCell>
+                                            <TableCell>
 
-                            <TableCell
-                                align="right">
+                                                Coin
 
-                                BB Width
+                                            </TableCell>
 
-                            </TableCell>
+                                            <TableCell
 
-                        </TableRow>
+                                                align="right"
 
-                    </TableHead>
+                                            >
 
-                    <TableBody>
+                                                BB Width
 
-                        {
+                                            </TableCell>
 
-                            sortedResults.map(result => (
+                                        </TableRow>
 
-                                <TableRow
-                                    key={result.symbol}>
+                                    </TableHead>
 
-                                    <TableCell>
+                                    <TableBody>
 
-                                        <Link
+                                        {
 
-                                            href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
+                                            pagedResults.map(result => (
 
-                                            target="_blank"
+                                                <TableRow
 
-                                            underline="hover">
+                                                    hover
 
-                                            {result.symbol}
+                                                    key={result.symbol}
 
-                                        </Link>
+                                                >
 
-                                    </TableCell>
+                                                    <TableCell>
 
-                                    <TableCell
-                                        align="right">
+                                                        <Link
 
-                                        <Chip
+                                                            href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
 
-                                            label={`${result.bbWidthPercent.toFixed(2)} %`}
+                                                            target="_blank"
+
+                                                            rel="noopener noreferrer"
+
+                                                            underline="hover"
+
+                                                        >
+
+                                                            {result.symbol}
+
+                                                        </Link>
+
+                                                    </TableCell>
+
+                                                    <TableCell
+
+                                                        align="right"
+
+                                                    >
+
+                                                        <Chip
+
+                                                            size="small"
+
+                                                            label={`${result.bbWidthPercent.toFixed(2)} %`}
+
+                                                            sx={{
+
+                                                                minWidth: 80,
+
+                                                                fontWeight: 600,
+
+                                                                color: getBbColor(
+
+                                                                    result.bbWidthPercent
+
+                                                                )
+
+                                                            }}
+
+                                                        />
+
+                                                    </TableCell>
+
+                                                </TableRow>
+
+                                            ))
+
+                                        }
+
+                                    </TableBody>
+
+                                </Table>
+
+                                {
+
+                                    pageCount > 1 &&
+
+                                    (
+
+                                        <Stack
+
+                                            direction="row"
+
+                                            justifyContent="flex-end"
 
                                             sx={{
 
-                                                color:
-
-                                                    getBbColor(
-
-                                                        result.bbWidthPercent
-
-                                                    )
+                                                mt: 2
 
                                             }}
 
-                                        />
+                                        >
 
-                                    </TableCell>
+                                            <Pagination
 
-                                </TableRow>
+                                                page={page}
 
-                            ))
+                                                count={pageCount}
 
-                        }
+                                                color="primary"
 
-                    </TableBody>
+                                                onChange={(event, value) =>
 
-                </Table>
+                                                    setPage(value)
 
-                <Typography
+                                                }
 
-                    sx={{
+                                            />
 
-                        mt: 2,
+                                        </Stack>
 
-                        textAlign: "right"
+                                    )
 
-                    }}
+                                }
 
-                    color="text.secondary">
+                            </>
 
-                    {sortedResults.length} Matches
+                        )
 
-                </Typography>
+                }
 
-            </CardContent>
+            </AccordionDetails>
 
-        </Card>
+        </Accordion>
 
     );
 

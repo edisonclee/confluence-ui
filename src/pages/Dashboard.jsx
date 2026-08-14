@@ -1,17 +1,12 @@
 import { useState } from "react";
 
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
 
 import { runScanner } from "../api/scannerApi";
 
 import DashboardHeader from "../components/DashboardHeader";
-import PerformanceCard from "../components/PerformanceCard";
-import ScannerFilters from "../components/ScannerFilters";
 import MultiTimeframeTable from "../components/MultiTimeframeTable";
 import ResultTable from "../components/ResultTable";
-
-import SummaryCard from "../components/SummaryCard";
 
 import {
 
@@ -162,60 +157,13 @@ export default function Dashboard() {
 
                 generatedAt={dashboardData.generatedAt}
 
-            />
+                dashboardData={dashboardData}
 
-            <SummaryCard
+                filters={filters}
 
-                symbolsScanned={
-                    dashboardData.symbolsScanned
-                }
-
-                totalMatches={
-                    dashboardData.totalMatches
-                }
-
-                multiTimeframeMatches={
-                    dashboardData.multiTimeframeMatches
-                }
+                setFilters={setFilters}
 
             />
-
-            <Grid
-                container
-                spacing={3}
-                sx={{ mb: 3 }}>
-
-                <Grid
-                    size={{
-                        xs: 12,
-                        md: 4
-                    }}>
-
-                    <PerformanceCard
-
-                        performance={dashboardData.performance}
-
-                    />
-
-                </Grid>
-
-                <Grid
-                    size={{
-                        xs: 12,
-                        md: 8
-                    }}>
-
-                    <ScannerFilters
-
-                        filters={filters}
-
-                        setFilters={setFilters}
-
-                    />
-
-                </Grid>
-
-            </Grid>
 
             <MultiTimeframeTable
 

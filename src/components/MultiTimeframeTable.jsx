@@ -1,6 +1,8 @@
 import {
-    Card,
-    CardContent,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Chip,
     Link,
     Table,
     TableBody,
@@ -10,122 +12,173 @@ import {
     Typography
 } from "@mui/material";
 
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 export default function MultiTimeframeTable({
 
     results
 
 }) {
 
-    if (!results || results.length === 0) {
-
-        return (
-
-            <Card sx={{ mt: 3 }}>
-
-                <CardContent>
-
-                    <Typography
-                        variant="h6"
-                        gutterBottom>
-
-                        ⭐ Multi-Timeframe
-
-                    </Typography>
-
-                    <Typography>
-
-                        No multi-timeframe matches.
-
-                    </Typography>
-
-                </CardContent>
-
-            </Card>
-
-        );
-
-    }
-
     return (
 
-        <Card sx={{ mt: 3 }}>
+        <Accordion
 
-            <CardContent>
+            defaultExpanded
+
+            sx={{
+
+                mt: 2
+
+            }}
+
+        >
+
+            <AccordionSummary
+
+                expandIcon={<ExpandMoreIcon />}
+
+            >
 
                 <Typography
-                    variant="h6"
-                    gutterBottom>
 
-                    ⭐ Multi-Timeframe
+                    fontWeight={600}
+
+                >
+
+                    ⭐ Multi-Timeframe ({results.length})
 
                 </Typography>
 
-                <Table>
+            </AccordionSummary>
 
-                    <TableHead>
+            <AccordionDetails>
 
-                        <TableRow>
+                {
 
-                            <TableCell>
+                    results.length === 0 ?
 
-                                Coin
+                        (
 
-                            </TableCell>
+                            <Typography
 
-                            <TableCell>
+                                color="text.secondary"
 
-                                Timeframes
+                            >
 
-                            </TableCell>
+                                No multi-timeframe matches.
 
-                        </TableRow>
+                            </Typography>
 
-                    </TableHead>
+                        )
 
-                    <TableBody>
+                        :
 
-                        {
+                        (
 
-                            results.map(result => (
+                            <Table size="small">
 
-                                <TableRow
-                                    key={result.symbol}>
+                                <TableHead>
 
-                                    <TableCell>
+                                    <TableRow>
 
-                                        <Link
+                                        <TableCell>
 
-                                            href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
+                                            Coin
 
-                                            target="_blank"
+                                        </TableCell>
 
-                                            underline="hover">
+                                        <TableCell>
 
-                                            {result.symbol}
+                                            Matching Timeframes
 
-                                        </Link>
+                                        </TableCell>
 
-                                    </TableCell>
+                                    </TableRow>
 
-                                    <TableCell>
+                                </TableHead>
 
-                                        {result.timeframes.join(" • ")}
+                                <TableBody>
 
-                                    </TableCell>
+                                    {
 
-                                </TableRow>
+                                        results.map(result => (
 
-                            ))
+                                            <TableRow
 
-                        }
+                                                key={result.symbol}
 
-                    </TableBody>
+                                            >
 
-                </Table>
+                                                <TableCell>
 
-            </CardContent>
+                                                    <Link
 
-        </Card>
+                                                        href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
+
+                                                        target="_blank"
+
+                                                        rel="noopener noreferrer"
+
+                                                        underline="hover"
+
+                                                    >
+
+                                                        {result.symbol}
+
+                                                    </Link>
+
+                                                </TableCell>
+
+                                                <TableCell>
+
+                                                    {
+
+                                                        result.timeframes.map(
+
+                                                            timeframe => (
+
+                                                                <Chip
+
+                                                                    key={timeframe}
+
+                                                                    label={timeframe}
+
+                                                                    size="small"
+
+                                                                    sx={{
+
+                                                                        mr: 0.5
+
+                                                                    }}
+
+                                                                />
+
+                                                            )
+
+                                                        )
+
+                                                    }
+
+                                                </TableCell>
+
+                                            </TableRow>
+
+                                        ))
+
+                                    }
+
+                                </TableBody>
+
+                            </Table>
+
+                        )
+
+                }
+
+            </AccordionDetails>
+
+        </Accordion>
 
     );
 

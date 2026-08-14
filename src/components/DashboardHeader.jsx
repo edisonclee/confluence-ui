@@ -2,10 +2,13 @@ import {
     Box,
     Button,
     CircularProgress,
-    Paper,
+    Divider,
     Stack,
     Typography
 } from "@mui/material";
+
+import SummaryCard from "./SummaryCard";
+import ScannerFilters from "./ScannerFilters";
 
 export default function DashboardHeader({
 
@@ -13,38 +16,73 @@ export default function DashboardHeader({
 
     onRunScan,
 
-    generatedAt
+    generatedAt,
+
+    dashboardData,
+
+    filters,
+
+    setFilters
 
 }) {
 
     return (
 
-        <Paper
-            elevation={3}
+        <Box
+
             sx={{
+
+                border: "1px solid",
+
+                borderColor: "divider",
+
+                borderRadius: 2,
+
                 p: 3,
-                mb: 3
+
+                mb: 3,
+
+                backgroundColor: "background.paper"
+
             }}
+
         >
 
-            <Box
-                display="flex"
+            {/* HEADER */}
+
+            <Stack
+
+                direction="row"
+
                 justifyContent="space-between"
+
                 alignItems="flex-start"
+
             >
 
                 <Box>
 
                     <Typography
-                        variant="h4"
-                        gutterBottom>
+
+                        variant="h5"
+
+                        fontWeight={600}
+
+                    >
 
                         Confluence Scanner
 
                     </Typography>
 
                     <Typography
-                        color="text.secondary">
+
+                        variant="body2"
+
+                        color="text.secondary"
+
+                        sx={{ mt: 0.5 }}
+
+                    >
 
                         {
 
@@ -64,8 +102,6 @@ export default function DashboardHeader({
 
                     variant="contained"
 
-                    size="large"
-
                     onClick={onRunScan}
 
                     disabled={loading}
@@ -75,8 +111,12 @@ export default function DashboardHeader({
                         loading
 
                             ? <CircularProgress
+
                                 size={18}
-                                color="inherit" />
+
+                                color="inherit"
+
+                            />
 
                             : null
 
@@ -96,9 +136,33 @@ export default function DashboardHeader({
 
                 </Button>
 
-            </Box>
+            </Stack>
 
-        </Paper>
+            <Divider sx={{ my: 2 }} />
+
+            <SummaryCard
+
+                symbolsScanned={dashboardData.symbolsScanned}
+
+                totalMatches={dashboardData.totalMatches}
+
+                multiTimeframeMatches={dashboardData.multiTimeframeMatches}
+
+                performance={dashboardData.performance}
+
+            />
+
+            <Divider sx={{ my: 2 }} />
+
+            <ScannerFilters
+
+                filters={filters}
+
+                setFilters={setFilters}
+
+            />
+
+        </Box>
 
     );
 

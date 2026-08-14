@@ -1,6 +1,5 @@
 import {
-    Card,
-    CardContent,
+    Box,
     Checkbox,
     FormControlLabel,
     Stack,
@@ -24,11 +23,13 @@ export default function ScannerFilters({
 
                 ...filters,
 
-                timeframes: filters.timeframes.filter(
+                timeframes:
 
-                    value => value !== timeframe
+                    filters.timeframes.filter(
 
-                )
+                        value => value !== timeframe
+
+                    )
 
             });
 
@@ -54,146 +55,185 @@ export default function ScannerFilters({
 
     return (
 
-        <Card
-            sx={{
-                height: "100%"
-            }}>
+        <Box sx={{ mt: 2 }}>
 
-            <CardContent>
+            <Typography
 
-                <Typography
-                    variant="h6"
-                    gutterBottom>
+                variant="subtitle2"
 
-                    Filters
+                color="text.secondary"
 
-                </Typography>
+                sx={{ mb: 1 }}
 
-                <Stack spacing={2}>
+            >
 
-                    <TextField
+                Filters
 
-                        label="Coin"
+            </Typography>
 
-                        value={filters.coin}
+            <Stack
 
-                        onChange={(event) =>
+                direction="row"
 
-                            setFilters({
+                spacing={3}
 
-                                ...filters,
+                alignItems="center"
 
-                                coin: event.target.value
+                flexWrap="wrap"
 
-                            })
+            >
+
+                <TextField
+
+                    label="Coin"
+
+                    size="small"
+
+                    value={filters.coin}
+
+                    onChange={(event) =>
+
+                        setFilters({
+
+                            ...filters,
+
+                            coin: event.target.value
+
+                        })
+
+                    }
+
+                    sx={{
+
+                        width: 220
+
+                    }}
+
+                />
+
+                <TextField
+
+                    label="Min BB %"
+
+                    type="number"
+
+                    size="small"
+
+                    value={filters.minBbWidth}
+
+                    onChange={(event) =>
+
+                        setFilters({
+
+                            ...filters,
+
+                            minBbWidth: event.target.value
+
+                        })
+
+                    }
+
+                    sx={{
+
+                        width: 120
+
+                    }}
+
+                />
+
+                <Stack
+
+                    direction="row"
+
+                    spacing={1}
+
+                >
+
+                    <FormControlLabel
+
+                        control={
+
+                            <Checkbox
+
+                                size="small"
+
+                                checked={filters.timeframes.includes("D1")}
+
+                                onChange={() => toggleTimeframe("D1")}
+
+                            />
 
                         }
 
+                        label="1D"
+
                     />
 
-                    <TextField
+                    <FormControlLabel
 
-                        label="Minimum BB Width"
+                        control={
 
-                        type="number"
+                            <Checkbox
 
-                        value={filters.minBbWidth}
+                                size="small"
 
-                        onChange={(event) =>
+                                checked={filters.timeframes.includes("H4")}
 
-                            setFilters({
+                                onChange={() => toggleTimeframe("H4")}
 
-                                ...filters,
-
-                                minBbWidth: event.target.value
-
-                            })
+                            />
 
                         }
 
+                        label="4H"
+
                     />
 
-                    <Stack direction="row">
+                    <FormControlLabel
 
-                        <FormControlLabel
+                        control={
 
-                            control={
+                            <Checkbox
 
-                                <Checkbox
+                                size="small"
 
-                                    checked={filters.timeframes.includes("D1")}
+                                checked={filters.timeframes.includes("H1")}
 
-                                    onChange={() => toggleTimeframe("D1")}
+                                onChange={() => toggleTimeframe("H1")}
 
-                                />
+                            />
 
-                            }
+                        }
 
-                            label="1D"
+                        label="1H"
 
-                        />
+                    />
 
-                        <FormControlLabel
+                    <FormControlLabel
 
-                            control={
+                        control={
 
-                                <Checkbox
+                            <Checkbox
 
-                                    checked={filters.timeframes.includes("H4")}
+                                size="small"
 
-                                    onChange={() => toggleTimeframe("H4")}
+                                checked={filters.timeframes.includes("M15")}
 
-                                />
+                                onChange={() => toggleTimeframe("M15")}
 
-                            }
+                            />
 
-                            label="4H"
+                        }
 
-                        />
+                        label="15M"
 
-                        <FormControlLabel
-
-                            control={
-
-                                <Checkbox
-
-                                    checked={filters.timeframes.includes("H1")}
-
-                                    onChange={() => toggleTimeframe("H1")}
-
-                                />
-
-                            }
-
-                            label="1H"
-
-                        />
-
-                        <FormControlLabel
-
-                            control={
-
-                                <Checkbox
-
-                                    checked={filters.timeframes.includes("M15")}
-
-                                    onChange={() => toggleTimeframe("M15")}
-
-                                />
-
-                            }
-
-                            label="15M"
-
-                        />
-
-                    </Stack>
+                    />
 
                 </Stack>
 
-            </CardContent>
+            </Stack>
 
-        </Card>
+        </Box>
 
     );
 
