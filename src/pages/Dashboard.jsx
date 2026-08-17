@@ -7,6 +7,7 @@ import { runScanner } from "../api/scannerApi";
 import DashboardHeader from "../components/DashboardHeader";
 import MultiTimeframeTable from "../components/MultiTimeframeTable";
 import ResultTable from "../components/ResultTable";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 import {
 
@@ -179,7 +180,7 @@ export default function Dashboard() {
 
                         key={timeframe.timeframe}
 
-                        title={`${timeframe.chartTimeframeDisplayName} | ${timeframe.bbTimeframeDisplayName} BB`}
+                        title={`${timeframe.chartTimeframeDisplayName} Chart Timeframe | ${timeframe.bbTimeframeDisplayName} BB Timeframe`}
 
                         results={timeframe.results}
 
@@ -188,6 +189,10 @@ export default function Dashboard() {
                 ))
 
             }
+
+            <LoadingOverlay
+                open={loading}
+            />
 
         </Container>
 

@@ -1,6 +1,4 @@
 import {
-    Box,
-    Divider,
     Stack,
     Typography
 } from "@mui/material";
@@ -9,28 +7,41 @@ function Metric({ label, value }) {
 
     return (
 
-        <Box
-            sx={{
-                minWidth: 90
-            }}>
+        <Stack
+
+            direction="row"
+
+            spacing={0.5}
+
+            alignItems="center"
+
+        >
 
             <Typography
-                variant="caption"
-                color="text.secondary">
 
-                {label}
+                variant="body2"
 
-            </Typography>
+                fontWeight={600}
 
-            <Typography
-                variant="h6"
-                fontWeight={600}>
+            >
 
                 {value}
 
             </Typography>
 
-        </Box>
+            <Typography
+
+                variant="caption"
+
+                color="text.secondary"
+
+            >
+
+                {label}
+
+            </Typography>
+
+        </Stack>
 
     );
 
@@ -56,15 +67,13 @@ export default function SummaryCard({
 
             spacing={3}
 
-            divider={<Divider orientation="vertical" flexItem />}
+            flexWrap="wrap"
+
+            alignItems="center"
 
             sx={{
 
-                mt: 2,
-
-                mb: 2,
-
-                flexWrap: "wrap"
+                py: 0.5
 
             }}
 
@@ -102,7 +111,7 @@ export default function SummaryCard({
 
                     performance
 
-                        ? `${performance.downloadSeconds.toFixed(1)} s`
+                        ? `${performance.downloadSeconds.toFixed(1)}s`
 
                         : "--"
 
@@ -118,7 +127,7 @@ export default function SummaryCard({
 
                     performance
 
-                        ? `${performance.scanSeconds.toFixed(1)} s`
+                        ? `${performance.scanSeconds.toFixed(1)}s`
 
                         : "--"
 
@@ -134,7 +143,7 @@ export default function SummaryCard({
 
                     performance
 
-                        ? `${performance.totalSeconds.toFixed(1)} s`
+                        ? `${performance.totalSeconds.toFixed(1)}s`
 
                         : "--"
 

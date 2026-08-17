@@ -3,8 +3,7 @@ import {
     Checkbox,
     FormControlLabel,
     Stack,
-    TextField,
-    Typography
+    TextField
 } from "@mui/material";
 
 export default function ScannerFilters({
@@ -23,13 +22,11 @@ export default function ScannerFilters({
 
                 ...filters,
 
-                timeframes:
+                timeframes: filters.timeframes.filter(
 
-                    filters.timeframes.filter(
+                    value => value !== timeframe
 
-                        value => value !== timeframe
-
-                    )
+                )
 
             });
 
@@ -55,27 +52,13 @@ export default function ScannerFilters({
 
     return (
 
-        <Box sx={{ mt: 2 }}>
-
-            <Typography
-
-                variant="subtitle2"
-
-                color="text.secondary"
-
-                sx={{ mb: 1 }}
-
-            >
-
-                Filters
-
-            </Typography>
+        <Box>
 
             <Stack
 
                 direction="row"
 
-                spacing={3}
+                spacing={2}
 
                 alignItems="center"
 
@@ -105,7 +88,19 @@ export default function ScannerFilters({
 
                     sx={{
 
-                        width: 220
+                        width: 160,
+
+                        "& .MuiInputBase-input": {
+
+                            fontSize: "0.85rem"
+
+                        },
+
+                        "& .MuiInputLabel-root": {
+
+                            fontSize: "0.85rem"
+
+                        }
 
                     }}
 
@@ -113,7 +108,7 @@ export default function ScannerFilters({
 
                 <TextField
 
-                    label="Min BB %"
+                    label="BB ≥ %"
 
                     type="number"
 
@@ -135,7 +130,19 @@ export default function ScannerFilters({
 
                     sx={{
 
-                        width: 120
+                        width: 90,
+
+                        "& .MuiInputBase-input": {
+
+                            fontSize: "0.85rem"
+
+                        },
+
+                        "& .MuiInputLabel-root": {
+
+                            fontSize: "0.85rem"
+
+                        }
 
                     }}
 
@@ -145,89 +152,63 @@ export default function ScannerFilters({
 
                     direction="row"
 
-                    spacing={1}
+                    spacing={0}
+
+                    alignItems="center"
 
                 >
 
-                    <FormControlLabel
+                    {
 
-                        control={
+                        [
 
-                            <Checkbox
+                            ["D1", "1D"],
 
-                                size="small"
+                            ["H4", "4H"],
 
-                                checked={filters.timeframes.includes("D1")}
+                            ["H1", "1H"],
 
-                                onChange={() => toggleTimeframe("D1")}
+                            ["M15", "15M"]
 
-                            />
+                        ].map(([value, label]) => (
 
-                        }
+                            <FormControlLabel
 
-                        label="1D"
+                                key={value}
 
-                    />
+                                sx={{
 
-                    <FormControlLabel
+                                    mr: 0.5,
 
-                        control={
+                                    "& .MuiFormControlLabel-label": {
 
-                            <Checkbox
+                                        fontSize: "0.85rem"
 
-                                size="small"
+                                    }
 
-                                checked={filters.timeframes.includes("H4")}
+                                }}
 
-                                onChange={() => toggleTimeframe("H4")}
+                                control={
 
-                            />
+                                    <Checkbox
 
-                        }
+                                        size="small"
 
-                        label="4H"
+                                        checked={filters.timeframes.includes(value)}
 
-                    />
+                                        onChange={() => toggleTimeframe(value)}
 
-                    <FormControlLabel
+                                    />
 
-                        control={
+                                }
 
-                            <Checkbox
-
-                                size="small"
-
-                                checked={filters.timeframes.includes("H1")}
-
-                                onChange={() => toggleTimeframe("H1")}
+                                label={label}
 
                             />
 
-                        }
+                        ))
 
-                        label="1H"
-
-                    />
-
-                    <FormControlLabel
-
-                        control={
-
-                            <Checkbox
-
-                                size="small"
-
-                                checked={filters.timeframes.includes("M15")}
-
-                                onChange={() => toggleTimeframe("M15")}
-
-                            />
-
-                        }
-
-                        label="15M"
-
-                    />
+                    }
 
                 </Stack>
 

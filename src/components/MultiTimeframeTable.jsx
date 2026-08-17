@@ -1,9 +1,13 @@
+import { useEffect, useMemo, useState } from "react";
+
 import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
     Chip,
     Link,
+    Pagination,
+    Stack,
     Table,
     TableBody,
     TableCell,
@@ -14,11 +18,54 @@ import {
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+const PAGE_SIZE = 10;
+
 export default function MultiTimeframeTable({
 
     results
 
 }) {
+
+    const [page, setPage] =
+        useState(1);
+
+    useEffect(() => {
+
+        setPage(1);
+
+    }, [results]);
+
+    const sortedResults = useMemo(() => {
+
+        return [...results].sort((a, b) => {
+
+            if (b.timeframes.length !== a.timeframes.length) {
+
+                return b.timeframes.length - a.timeframes.length;
+
+            }
+
+            return a.symbol.localeCompare(b.symbol);
+
+        });
+
+    }, [results]);
+
+    const pageCount = Math.ceil(
+
+        sortedResults.length /
+
+        PAGE_SIZE
+
+    );
+
+    const pagedResults = sortedResults.slice(
+
+        (page - 1) * PAGE_SIZE,
+
+        page * PAGE_SIZE
+
+    );
 
     return (
 
@@ -40,15 +87,37 @@ export default function MultiTimeframeTable({
 
             >
 
-                <Typography
+                <Stack
 
-                    fontWeight={600}
+                    direction="row"
+
+                    justifyContent="space-between"
+
+                    alignItems="center"
+
+                    width="100%"
 
                 >
 
-                    ⭐ Multi-Timeframe ({results.length})
+                    <Typography
 
-                </Typography>
+                        fontWeight={600}
+
+                    >
+
+                        ⭐ Multi-Timeframe
+
+                    </Typography>
+
+                    <Chip
+
+                        label={`${results.length} Matches`}
+
+                        size="small"
+
+                    />
+
+                </Stack>
 
             </AccordionSummary>
 
@@ -76,101 +145,157 @@ export default function MultiTimeframeTable({
 
                         (
 
-                            <Table size="small">
+                            <>
 
-                                <TableHead>
+                                <Table
 
-                                    <TableRow>
+                                    size="small"
 
-                                        <TableCell>
+                                    stickyHeader
 
-                                            Coin
+                                >
 
-                                        </TableCell>
+                                    <TableHead>
 
-                                        <TableCell>
+                                        <TableRow>
 
-                                            Matching Timeframes
+                                            <TableCell>
 
-                                        </TableCell>
+                                                Coin
 
-                                    </TableRow>
+                                            </TableCell>
 
-                                </TableHead>
+                                            <TableCell>
 
-                                <TableBody>
+                                                Matching Timeframes
 
-                                    {
+                                            </TableCell>
 
-                                        results.map(result => (
+                                        </TableRow>
 
-                                            <TableRow
+                                    </TableHead>
 
-                                                key={result.symbol}
+                                    <TableBody>
 
-                                            >
+                                        {
 
-                                                <TableCell>
+                                            pagedResults.map(result => (
 
-                                                    <Link
+                                                <TableRow
 
-                                                        href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
+                                                    hover
 
-                                                        target="_blank"
+                                                    key={result.symbol}
 
-                                                        rel="noopener noreferrer"
+                                                >
 
-                                                        underline="hover"
+                                                    <TableCell>
 
-                                                    >
+                                                        <Link
 
-                                                        {result.symbol}
+                                                            href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
 
-                                                    </Link>
+                                                            target="_blank"
 
-                                                </TableCell>
+                                                            rel="noopener noreferrer"
 
-                                                <TableCell>
+                                                            underline="hover"
 
-                                                    {
+                                                        >
 
-                                                        result.timeframes.map(
+                                                            {result.symbol}
 
-                                                            timeframe => (
+                                                        </Link>
 
-                                                                <Chip
+                                                    </TableCell>
 
-                                                                    key={timeframe}
+                                                    <TableCell>
 
-                                                                    label={timeframe}
+                                                        {
 
-                                                                    size="small"
+                                                            result.timeframes.map(
 
-                                                                    sx={{
+                                                                timeframe => (
 
-                                                                        mr: 0.5
+                                                                    <Chip
 
-                                                                    }}
+                                                                        key={timeframe}
 
-                                                                />
+                                                                        label={timeframe}
+
+                                                                        size="small"
+
+                                                                        sx={{
+
+                                                                            mr: 0.5,
+
+                                                                            mb: 0.5
+
+                                                                        }}
+
+                                                                    />
+
+                                                                )
 
                                                             )
 
-                                                        )
+                                                        }
 
-                                                    }
+                                                    </TableCell>
 
-                                                </TableCell>
+                                                </TableRow>
 
-                                            </TableRow>
+                                            ))
 
-                                        ))
+                                        }
 
-                                    }
+                                    </TableBody>
 
-                                </TableBody>
+                                </Table>
 
-                            </Table>
+                                {
+
+                                    pageCount > 1 &&
+
+                                    (
+
+                                        <Stack
+
+                                            direction="row"
+
+                                            justifyContent="flex-end"
+
+                                            sx={{
+
+                                                mt: 2
+
+                                            }}
+
+                                        >
+
+                                            <Pagination
+
+                                                page={page}
+
+                                                count={pageCount}
+
+                                                color="primary"
+
+                                                onChange={(event, value) =>
+
+                                                    setPage(value)
+
+                                                }
+
+                                            />
+
+                                        </Stack>
+
+                                    )
+
+                                }
+
+                            </>
 
                         )
 

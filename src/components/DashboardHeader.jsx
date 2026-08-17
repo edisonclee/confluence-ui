@@ -38,7 +38,7 @@ export default function DashboardHeader({
 
                 borderRadius: 2,
 
-                p: 3,
+                p: 2,
 
                 mb: 3,
 
@@ -48,15 +48,13 @@ export default function DashboardHeader({
 
         >
 
-            {/* HEADER */}
-
             <Stack
 
                 direction="row"
 
                 justifyContent="space-between"
 
-                alignItems="flex-start"
+                alignItems="center"
 
             >
 
@@ -64,9 +62,9 @@ export default function DashboardHeader({
 
                     <Typography
 
-                        variant="h5"
+                        variant="h6"
 
-                        fontWeight={600}
+                        fontWeight={700}
 
                     >
 
@@ -76,11 +74,9 @@ export default function DashboardHeader({
 
                     <Typography
 
-                        variant="body2"
+                        variant="caption"
 
                         color="text.secondary"
-
-                        sx={{ mt: 0.5 }}
 
                     >
 
@@ -88,9 +84,9 @@ export default function DashboardHeader({
 
                             generatedAt
 
-                                ? `Last Scan : ${new Date(generatedAt).toLocaleString()}`
+                                ? `Last Scan: ${new Date(generatedAt).toLocaleString()}`
 
-                                : "No scan has been executed."
+                                : "No scan executed"
 
                         }
 
@@ -102,6 +98,18 @@ export default function DashboardHeader({
 
                     variant="contained"
 
+                    size="small"
+
+                    sx={{
+
+                        ml: 3,
+
+                        minWidth: 110,
+
+                        height: 40
+
+                    }}
+
                     onClick={onRunScan}
 
                     disabled={loading}
@@ -110,13 +118,17 @@ export default function DashboardHeader({
 
                         loading
 
-                            ? <CircularProgress
+                            ? (
 
-                                size={18}
+                                <CircularProgress
 
-                                color="inherit"
+                                    size={16}
 
-                            />
+                                    color="inherit"
+
+                                />
+
+                            )
 
                             : null
 
@@ -138,7 +150,7 @@ export default function DashboardHeader({
 
             </Stack>
 
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 1.5 }} />
 
             <SummaryCard
 
@@ -152,7 +164,7 @@ export default function DashboardHeader({
 
             />
 
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 1.5 }} />
 
             <ScannerFilters
 
