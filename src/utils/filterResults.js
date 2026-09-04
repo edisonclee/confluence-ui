@@ -1,85 +1,41 @@
 export function filterTimeframes(
+  timeframes,
 
-    timeframes,
-
-    filters
-
+  filters,
 ) {
+  return timeframes
 
-    return timeframes
+    .map((timeframe) => ({
+      ...timeframe,
 
-        .filter(timeframe =>
+      results: timeframe.results.filter((result) => {
+        const coinMatch = result.symbol
 
-            filters.timeframes.includes(
+          .toUpperCase()
 
-                timeframe.timeframe
+          .includes(filters.coin.toUpperCase());
 
-            )
+        const bbMatch =
+          filters.minBbWidth === "" ||
+          result.bbWidthPercent >= Number(filters.minBbWidth);
 
-        )
+        return coinMatch && bbMatch;
+      }),
+    }))
 
-        .map(timeframe => ({
-
-            ...timeframe,
-
-            results:
-
-                timeframe.results.filter(result => {
-
-                    const coinMatch =
-
-                        result.symbol
-
-                            .toUpperCase()
-
-                            .includes(
-
-                                filters.coin.toUpperCase()
-
-                            );
-
-                    const bbMatch =
-
-                        filters.minBbWidth === ""
-
-                        ||
-
-                        result.bbWidthPercent >= Number(filters.minBbWidth);
-
-                    return coinMatch && bbMatch;
-
-                })
-
-        }))
-
-        .filter(timeframe =>
-
-            timeframe.results.length > 0
-
-        );
-
+    .filter((timeframe) => timeframe.results.length > 0);
 }
 
 export function filterMultiTimeframe(
+  results,
 
-    results,
-
-    filters
-
+  filters,
 ) {
+  return results.filter((result) =>
+    result.symbol
 
-    return results.filter(result =>
+      .toUpperCase()
 
-        result.symbol
-
-            .toUpperCase()
-
-            .includes(
-
-                filters.coin.toUpperCase()
-
-            )
-
-    );
-
+      .includes(filters.coin.toUpperCase()),
+  );
 }

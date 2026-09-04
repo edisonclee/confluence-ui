@@ -9,193 +9,124 @@ import MultiTimeframeTable from "../components/MultiTimeframeTable";
 import ResultTable from "../components/ResultTable";
 import LoadingOverlay from "../components/LoadingOverlay";
 
-import {
-
-    filterTimeframes,
-
-    filterMultiTimeframe
-
-} from "../utils/filterResults";
+import { filterTimeframes, filterMultiTimeframe } from "../utils/filterResults";
 
 export default function Dashboard() {
+  const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] =
-        useState(false);
+  const [dashboardData, setDashboardData] = useState({
+    performance: null,
 
-    const [dashboardData, setDashboardData] =
-        useState({
+    generatedAt: null,
 
-            performance: null,
+    symbolsScanned: 0,
 
-            generatedAt: null,
+    totalMatches: 0,
 
-            symbolsScanned: 0,
+    multiTimeframeMatches: 0,
 
-            totalMatches: 0,
+    multiTimeframe: [],
 
-            multiTimeframeMatches: 0,
+    timeframes: [],
+  });
 
-            multiTimeframe: [],
+  const [filters, setFilters] = useState({
+    coin: "",
 
-            timeframes: []
+    minBbWidth: "",
+  });
 
-        });
+  const [bbTimeframes, setBbTimeframes] = useState(["H1", "H4", "D1", "W1"]);
 
-    const [filters, setFilters] =
-        useState({
+  const filteredTimeframes = filterTimeframes(
+    dashboardData.timeframes,
 
-            coin: "",
+    filters,
+  );
 
-            minBbWidth: "",
+  const filteredMultiTimeframe = filterMultiTimeframe(
+    dashboardData.multiTimeframe,
 
-            timeframes: [
+    filters,
+  );
 
-                "D1",
+  async function handleRunScanner() {
+    try {
+      setLoading(true);
 
-                "H4",
+      const response = await runScanner(bbTimeframes);
 
-                "H1",
+      setDashboardData({
+        performance: {
+          downloadSeconds: response.downloadSeconds,
 
-                "M15"
+          scanSeconds: response.scanSeconds,
 
-            ]
+          totalSeconds: response.totalSeconds,
+        },
 
-        });
+        generatedAt: response.generatedAt,
 
-    const filteredTimeframes =
+        symbolsScanned: response.symbolsScanned,
 
-        filterTimeframes(
+        totalMatches: response.totalMatches,
 
-            dashboardData.timeframes,
+        multiTimeframeMatches: response.multiTimeframeMatches,
 
-            filters
+        multiTimeframe: response.multiTimeframe,
 
-        );
+        timeframes: response.timeframes,
+      });
+    } catch (error) {
+      console.error(error);
 
-    const filteredMultiTimeframe =
-
-        filterMultiTimeframe(
-
-            dashboardData.multiTimeframe,
-
-            filters
-
-        );
-
-    async function handleRunScanner() {
-
-        try {
-
-            setLoading(true);
-
-            const response =
-                await runScanner();
-
-            setDashboardData({
-
-                performance: {
-
-                    downloadSeconds:
-                        response.downloadSeconds,
-
-                    scanSeconds:
-                        response.scanSeconds,
-
-                    totalSeconds:
-                        response.totalSeconds
-
-                },
-
-                generatedAt:
-                    response.generatedAt,
-
-                symbolsScanned:
-                    response.symbolsScanned,
-
-                totalMatches:
-                    response.totalMatches,
-
-                multiTimeframeMatches:
-                    response.multiTimeframeMatches,
-
-                multiTimeframe:
-                    response.multiTimeframe,
-
-                timeframes:
-                    response.timeframes
-
-            });
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "Unable to connect to backend.");
-
-        } finally {
-
-            setLoading(false);
-
-        }
-
+      alert("Unable to connect to backend.");
+    } finally {
+      setLoading(false);
     }
+  }
 
-    return (
+  return (
+    <Container
+      maxWidth="xl"
+      sx={{
+        mt: 4,
+        mb: 4,
+      }}
+    >
+      <DashboardHeader
+        loading={loading}
 
-        <Container
-            maxWidth="xl"
-            sx={{
-                mt: 4,
-                mb: 4
-            }}>
+        onRunScan={handleRunScanner}
 
-            <DashboardHeader
+        generatedAt={dashboardData.generatedAt}
 
-                loading={loading}
+        dashboardData={dashboardData}
 
-                onRunScan={handleRunScanner}
+        filters={filters}
 
-                generatedAt={dashboardData.generatedAt}
+        setFilters={setFilters}
 
-                dashboardData={dashboardData}
+        bbTimeframes={bbTimeframes}
 
-                filters={filters}
+        setBbTimeframes={setBbTimeframes}
+      />
 
-                setFilters={setFilters}
+      {filteredMultiTimeframe.length > 0 && (
+        <MultiTimeframeTable results={filteredMultiTimeframe} />
+      )}
 
-            />
+      {filteredTimeframes.map((timeframe) => (
+        <ResultTable
+          key={timeframe.timeframe}
 
-            <MultiTimeframeTable
+          title={`${timeframe.chartTimeframeDisplayName} Chart Timeframe | ${timeframe.bbTimeframeDisplayName} BB Timeframe`}
 
-                results={filteredMultiTimeframe}
+          results={timeframe.results}
+        />
+      ))}
 
-            />
-
-            {
-
-                filteredTimeframes.map(timeframe => (
-
-                    <ResultTable
-
-                        key={timeframe.timeframe}
-
-                        title={`${timeframe.chartTimeframeDisplayName} Chart Timeframe | ${timeframe.bbTimeframeDisplayName} BB Timeframe`}
-
-                        results={timeframe.results}
-
-                    />
-
-                ))
-
-            }
-
-            <LoadingOverlay
-                open={loading}
-            />
-
-        </Container>
-
-    );
-
+      <LoadingOverlay open={loading} />
+    </Container>
+  );
 }

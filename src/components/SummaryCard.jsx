@@ -1,158 +1,93 @@
-import {
-    Stack,
-    Typography
-} from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 function Metric({ label, value }) {
+  return (
+    <Stack
+      direction="row"
 
-    return (
+      spacing={0.5}
 
-        <Stack
+      alignItems="center"
+    >
+      <Typography
+        variant="body2"
 
-            direction="row"
+        fontWeight={600}
+      >
+        {value}
+      </Typography>
 
-            spacing={0.5}
+      <Typography
+        variant="caption"
 
-            alignItems="center"
-
-        >
-
-            <Typography
-
-                variant="body2"
-
-                fontWeight={600}
-
-            >
-
-                {value}
-
-            </Typography>
-
-            <Typography
-
-                variant="caption"
-
-                color="text.secondary"
-
-            >
-
-                {label}
-
-            </Typography>
-
-        </Stack>
-
-    );
-
+        color="text.secondary"
+      >
+        {label}
+      </Typography>
+    </Stack>
+  );
 }
 
 export default function SummaryCard({
+  symbolsScanned,
 
-    symbolsScanned,
+  totalMatches,
 
-    totalMatches,
+  multiTimeframeMatches,
 
-    multiTimeframeMatches,
-
-    performance
-
+  performance,
 }) {
+  return (
+    <Stack
+      direction="row"
 
-    return (
+      spacing={3}
 
-        <Stack
+      flexWrap="wrap"
 
-            direction="row"
+      alignItems="center"
 
-            spacing={3}
+      sx={{
+        py: 0.5,
+      }}
+    >
+      <Metric
+        label="Symbols"
 
-            flexWrap="wrap"
+        value={symbolsScanned}
+      />
 
-            alignItems="center"
+      <Metric
+        label="Matches"
 
-            sx={{
+        value={totalMatches}
+      />
 
-                py: 0.5
+      <Metric
+        label="Multi-TF"
 
-            }}
+        value={multiTimeframeMatches}
+      />
 
-        >
+      <Metric
+        label="Download"
 
-            <Metric
+        value={
+          performance ? `${performance.downloadSeconds.toFixed(1)}s` : "--"
+        }
+      />
 
-                label="Symbols"
+      <Metric
+        label="Scan"
 
-                value={symbolsScanned}
+        value={performance ? `${performance.scanSeconds.toFixed(1)}s` : "--"}
+      />
 
-            />
+      <Metric
+        label="Total"
 
-            <Metric
-
-                label="Matches"
-
-                value={totalMatches}
-
-            />
-
-            <Metric
-
-                label="Multi-TF"
-
-                value={multiTimeframeMatches}
-
-            />
-
-            <Metric
-
-                label="Download"
-
-                value={
-
-                    performance
-
-                        ? `${performance.downloadSeconds.toFixed(1)}s`
-
-                        : "--"
-
-                }
-
-            />
-
-            <Metric
-
-                label="Scan"
-
-                value={
-
-                    performance
-
-                        ? `${performance.scanSeconds.toFixed(1)}s`
-
-                        : "--"
-
-                }
-
-            />
-
-            <Metric
-
-                label="Total"
-
-                value={
-
-                    performance
-
-                        ? `${performance.totalSeconds.toFixed(1)}s`
-
-                        : "--"
-
-                }
-
-            />
-
-        </Stack>
-
-    );
-
+        value={performance ? `${performance.totalSeconds.toFixed(1)}s` : "--"}
+      />
+    </Stack>
+  );
 }

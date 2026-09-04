@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Chip,
-    Link,
-    Pagination,
-    Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Typography
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Chip,
+  Link,
+  Pagination,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
 } from "@mui/material";
 
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -23,290 +23,139 @@ import { getBbColor } from "../utils/bbColor";
 const PAGE_SIZE = 10;
 
 export default function ResultTable({
+  title,
 
-    title,
-
-    results
-
+  results,
 }) {
+  const [page, setPage] = useState(1);
 
-    const [page, setPage] =
-        useState(1);
+  useEffect(() => {
+    setPage(1);
+  }, [results]);
 
-    useEffect(() => {
+  const sortedResults = useMemo(() => {
+    return [...results].sort((a, b) => b.bbWidthPercent - a.bbWidthPercent);
+  }, [results]);
 
-        setPage(1);
+  const pageCount = Math.ceil(sortedResults.length / PAGE_SIZE);
 
-    }, [results]);
+  const pagedResults = sortedResults.slice(
+    (page - 1) * PAGE_SIZE,
 
-    const sortedResults = useMemo(() => {
+    page * PAGE_SIZE,
+  );
 
-        return [...results].sort(
+  return (
+    <Accordion
+      defaultExpanded
 
-            (a, b) =>
+      sx={{
+        mt: 2,
+      }}
+    >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Stack
+          direction="row"
 
-                b.bbWidthPercent -
+          justifyContent="space-between"
 
-                a.bbWidthPercent
+          alignItems="center"
 
-        );
-
-    }, [results]);
-
-    const pageCount = Math.ceil(
-
-        sortedResults.length /
-
-        PAGE_SIZE
-
-    );
-
-    const pagedResults = sortedResults.slice(
-
-        (page - 1) * PAGE_SIZE,
-
-        page * PAGE_SIZE
-
-    );
-
-    return (
-
-        <Accordion
-
-            defaultExpanded
-
-            sx={{
-
-                mt: 2
-
-            }}
-
+          width="100%"
         >
+          <Typography fontWeight={600}>{title}</Typography>
 
-            <AccordionSummary
+          <Chip
+            label={`${results.length} Matches`}
 
-                expandIcon={<ExpandMoreIcon />}
+            size="small"
+          />
+        </Stack>
+      </AccordionSummary>
 
+      <AccordionDetails>
+        {results.length === 0 ? (
+          <Typography color="text.secondary">No matches found.</Typography>
+        ) : (
+          <>
+            <Table
+              size="small"
+
+              stickyHeader
             >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Coin</TableCell>
 
-                <Stack
+                  <TableCell align="right">BB Width</TableCell>
+                </TableRow>
+              </TableHead>
 
-                    direction="row"
+              <TableBody>
+                {pagedResults.map((result) => (
+                  <TableRow
+                    hover
 
-                    justifyContent="space-between"
+                    key={result.symbol}
+                  >
+                    <TableCell>
+                      <Link
+                        href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
 
-                    alignItems="center"
+                        target="_blank"
 
-                    width="100%"
+                        rel="noopener noreferrer"
 
-                >
+                        underline="hover"
+                      >
+                        {result.symbol}
+                      </Link>
+                    </TableCell>
 
-                    <Typography
-
-                        fontWeight={600}
-
-                    >
-
-                        {title}
-
-                    </Typography>
-
-                    <Chip
-
-                        label={`${results.length} Matches`}
-
+                    <TableCell align="right">
+                      <Chip
                         size="small"
 
-                    />
-
-                </Stack>
-
-            </AccordionSummary>
-
-            <AccordionDetails>
-
-                {
-
-                    results.length === 0 ?
-
-                        (
-
-                            <Typography
-
-                                color="text.secondary"
-
-                            >
-
-                                No matches found.
-
-                            </Typography>
-
-                        )
-
-                        :
-
-                        (
-
-                            <>
-
-                                <Table
-
-                                    size="small"
-
-                                    stickyHeader
-
-                                >
-
-                                    <TableHead>
-
-                                        <TableRow>
-
-                                            <TableCell>
-
-                                                Coin
-
-                                            </TableCell>
-
-                                            <TableCell
-
-                                                align="right"
-
-                                            >
-
-                                                BB Width
-
-                                            </TableCell>
-
-                                        </TableRow>
-
-                                    </TableHead>
-
-                                    <TableBody>
-
-                                        {
-
-                                            pagedResults.map(result => (
-
-                                                <TableRow
-
-                                                    hover
-
-                                                    key={result.symbol}
-
-                                                >
-
-                                                    <TableCell>
-
-                                                        <Link
-
-                                                            href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
-
-                                                            target="_blank"
-
-                                                            rel="noopener noreferrer"
-
-                                                            underline="hover"
-
-                                                        >
-
-                                                            {result.symbol}
-
-                                                        </Link>
-
-                                                    </TableCell>
-
-                                                    <TableCell
-
-                                                        align="right"
-
-                                                    >
-
-                                                        <Chip
-
-                                                            size="small"
-
-                                                            label={`${result.bbWidthPercent.toFixed(2)} %`}
-
-                                                            sx={{
-
-                                                                minWidth: 80,
-
-                                                                fontWeight: 600,
-
-                                                                color: getBbColor(
-
-                                                                    result.bbWidthPercent
-
-                                                                )
-
-                                                            }}
-
-                                                        />
-
-                                                    </TableCell>
-
-                                                </TableRow>
-
-                                            ))
-
-                                        }
-
-                                    </TableBody>
-
-                                </Table>
-
-                                {
-
-                                    pageCount > 1 &&
-
-                                    (
-
-                                        <Stack
-
-                                            direction="row"
-
-                                            justifyContent="flex-end"
-
-                                            sx={{
-
-                                                mt: 2
-
-                                            }}
-
-                                        >
-
-                                            <Pagination
-
-                                                page={page}
-
-                                                count={pageCount}
-
-                                                color="primary"
-
-                                                onChange={(event, value) =>
-
-                                                    setPage(value)
-
-                                                }
-
-                                            />
-
-                                        </Stack>
-
-                                    )
-
-                                }
-
-                            </>
-
-                        )
-
-                }
-
-            </AccordionDetails>
-
-        </Accordion>
-
-    );
-
+                        label={`${result.bbWidthPercent.toFixed(2)} %`}
+
+                        sx={{
+                          minWidth: 80,
+
+                          fontWeight: 600,
+
+                          color: getBbColor(result.bbWidthPercent),
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            {pageCount > 1 && (
+              <Stack
+                direction="row"
+
+                justifyContent="flex-end"
+
+                sx={{
+                  mt: 2,
+                }}
+              >
+                <Pagination
+                  page={page}
+
+                  count={pageCount}
+
+                  color="primary"
+
+                  onChange={(event, value) => setPage(value)}
+                />
+              </Stack>
+            )}
+          </>
+        )}
+      </AccordionDetails>
+    </Accordion>
+  );
 }

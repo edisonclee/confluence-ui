@@ -1,221 +1,141 @@
 import {
-    Box,
-    Checkbox,
-    FormControlLabel,
-    Stack,
-    TextField
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Stack,
+  TextField,
 } from "@mui/material";
 
 export default function ScannerFilters({
+  filters,
 
-    filters,
+  setFilters,
 
-    setFilters
+  bbTimeframes,
 
+  setBbTimeframes,
 }) {
-
-    function toggleTimeframe(timeframe) {
-
-        if (filters.timeframes.includes(timeframe)) {
-
-            setFilters({
-
-                ...filters,
-
-                timeframes: filters.timeframes.filter(
-
-                    value => value !== timeframe
-
-                )
-
-            });
-
-        } else {
-
-            setFilters({
-
-                ...filters,
-
-                timeframes: [
-
-                    ...filters.timeframes,
-
-                    timeframe
-
-                ]
-
-            });
-
-        }
-
+  function toggleTimeframe(timeframe) {
+    if (bbTimeframes.includes(timeframe)) {
+      setBbTimeframes(bbTimeframes.filter((value) => value !== timeframe));
+    } else {
+      setBbTimeframes([...bbTimeframes, timeframe]);
     }
+  }
 
-    return (
+  return (
+    <Box>
+      <Stack
+        direction="row"
 
-        <Box>
+        spacing={2}
 
-            <Stack
+        alignItems="center"
 
-                direction="row"
+        flexWrap="wrap"
+      >
+        <TextField
+          label="Coin"
 
-                spacing={2}
+          size="small"
 
-                alignItems="center"
+          value={filters.coin}
 
-                flexWrap="wrap"
+          onChange={(event) =>
+            setFilters({
+              ...filters,
 
-            >
+              coin: event.target.value,
+            })
+          }
 
-                <TextField
+          sx={{
+            width: 160,
 
-                    label="Coin"
+            "& .MuiInputBase-input": {
+              fontSize: "0.85rem",
+            },
 
-                    size="small"
+            "& .MuiInputLabel-root": {
+              fontSize: "0.85rem",
+            },
+          }}
+        />
 
-                    value={filters.coin}
+        <TextField
+          label="BB ≥ %"
 
-                    onChange={(event) =>
+          type="number"
 
-                        setFilters({
+          size="small"
 
-                            ...filters,
+          value={filters.minBbWidth}
 
-                            coin: event.target.value
+          onChange={(event) =>
+            setFilters({
+              ...filters,
 
-                        })
+              minBbWidth: event.target.value,
+            })
+          }
 
-                    }
+          sx={{
+            width: 90,
 
-                    sx={{
+            "& .MuiInputBase-input": {
+              fontSize: "0.85rem",
+            },
 
-                        width: 160,
+            "& .MuiInputLabel-root": {
+              fontSize: "0.85rem",
+            },
+          }}
+        />
 
-                        "& .MuiInputBase-input": {
+        <Stack
+          direction="row"
 
-                            fontSize: "0.85rem"
+          spacing={0}
 
-                        },
+          alignItems="center"
+        >
+          {[
+            ["H1", "1H"],
 
-                        "& .MuiInputLabel-root": {
+            ["H4", "4H"],
 
-                            fontSize: "0.85rem"
+            ["D1", "1D"],
 
-                        }
+            ["W1", "1W"],
 
-                    }}
+            ["MN1", "1M"],
+          ].map(([value, label]) => (
+            <FormControlLabel
+              key={value}
 
+              sx={{
+                mr: 0.5,
+
+                "& .MuiFormControlLabel-label": {
+                  fontSize: "0.85rem",
+                },
+              }}
+
+              control={
+                <Checkbox
+                  size="small"
+
+                  checked={bbTimeframes.includes(value)}
+
+                  onChange={() => toggleTimeframe(value)}
                 />
+              }
 
-                <TextField
-
-                    label="BB ≥ %"
-
-                    type="number"
-
-                    size="small"
-
-                    value={filters.minBbWidth}
-
-                    onChange={(event) =>
-
-                        setFilters({
-
-                            ...filters,
-
-                            minBbWidth: event.target.value
-
-                        })
-
-                    }
-
-                    sx={{
-
-                        width: 90,
-
-                        "& .MuiInputBase-input": {
-
-                            fontSize: "0.85rem"
-
-                        },
-
-                        "& .MuiInputLabel-root": {
-
-                            fontSize: "0.85rem"
-
-                        }
-
-                    }}
-
-                />
-
-                <Stack
-
-                    direction="row"
-
-                    spacing={0}
-
-                    alignItems="center"
-
-                >
-
-                    {
-
-                        [
-
-                            ["D1", "1D"],
-
-                            ["H4", "4H"],
-
-                            ["H1", "1H"],
-
-                            ["M15", "15M"]
-
-                        ].map(([value, label]) => (
-
-                            <FormControlLabel
-
-                                key={value}
-
-                                sx={{
-
-                                    mr: 0.5,
-
-                                    "& .MuiFormControlLabel-label": {
-
-                                        fontSize: "0.85rem"
-
-                                    }
-
-                                }}
-
-                                control={
-
-                                    <Checkbox
-
-                                        size="small"
-
-                                        checked={filters.timeframes.includes(value)}
-
-                                        onChange={() => toggleTimeframe(value)}
-
-                                    />
-
-                                }
-
-                                label={label}
-
-                            />
-
-                        ))
-
-                    }
-
-                </Stack>
-
-            </Stack>
-
-        </Box>
-
-    );
-
+              label={label}
+            />
+          ))}
+        </Stack>
+      </Stack>
+    </Box>
+  );
 }
