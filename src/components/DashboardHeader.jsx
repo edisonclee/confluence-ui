@@ -17,6 +17,8 @@ export default function DashboardHeader({
 
   generatedAt,
 
+  isCachedResult,
+
   dashboardData,
 
   filters,
@@ -65,7 +67,9 @@ export default function DashboardHeader({
             color="text.secondary"
           >
             {generatedAt
-              ? `Last Scan: ${new Date(generatedAt).toLocaleString()}`
+              ? `Last Scan: ${new Date(generatedAt).toLocaleString()}${
+                  isCachedResult ? " (cached)" : ""
+                }`
               : "No scan executed"}
           </Typography>
         </Box>

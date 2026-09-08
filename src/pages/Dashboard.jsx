@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Container from "@mui/material/Container";
 
@@ -11,24 +11,46 @@ import LoadingOverlay from "../components/LoadingOverlay";
 
 import { filterTimeframes, filterMultiTimeframe } from "../utils/filterResults";
 
+const BB_SCAN_CACHE_PREFIX = "confluence-scanner:bb-scan:";
+
+function createEmptyDashboardData() {
+  return {
+    performance: null,
+    generatedAt: null,
+    symbolsScanned: 0,
+    totalMatches: 0,
+    multiTimeframeMatches: 0,
+    multiTimeframe: [],
+    timeframes: [],
+  };
+}
+
+function getCacheKey(timeframes) {
+  return `${BB_SCAN_CACHE_PREFIX}${[...timeframes].sort().join(",")}`;
+}
+
+function toDashboardData(response) {
+  return {
+    performance: {
+      downloadSeconds: response.downloadSeconds,
+      scanSeconds: response.scanSeconds,
+      totalSeconds: response.totalSeconds,
+    },
+    generatedAt: response.generatedAt,
+    symbolsScanned: response.symbolsScanned,
+    totalMatches: response.totalMatches,
+    multiTimeframeMatches: response.multiTimeframeMatches,
+    multiTimeframe: response.multiTimeframe,
+    timeframes: response.timeframes,
+  };
+}
+
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
 
-  const [dashboardData, setDashboardData] = useState({
-    performance: null,
+  const [dashboardData, setDashboardData] = useState(createEmptyDashboardData);
 
-    generatedAt: null,
-
-    symbolsScanned: 0,
-
-    totalMatches: 0,
-
-    multiTimeframeMatches: 0,
-
-    multiTimeframe: [],
-
-    timeframes: [],
-  });
+  const [isCachedResult, setIsCachedResult] = useState(false);
 
   const [filters, setFilters] = useState({
     coin: "",
@@ -37,6 +59,34 @@ export default function Dashboard() {
   });
 
   const [bbTimeframes, setBbTimeframes] = useState(["H1", "H4", "D1", "W1"]);
+
+  useEffect(() => {
+    const cacheKey = getCacheKey(bbTimeframes);
+
+    try {
+      const cachedValue = localStorage.getItem(cacheKey);
+
+      if (cachedValue === null) {
+        setDashboardData(createEmptyDashboardData());
+        setIsCachedResult(false);
+        return;
+      }
+
+      const cachedData = JSON.parse(cachedValue);
+
+      if (!Array.isArray(cachedData.timeframes)) {
+        throw new Error("Invalid cached BB scan result.");
+      }
+
+      setDashboardData(cachedData);
+      setIsCachedResult(true);
+    } catch (error) {
+      console.warn("Unable to restore cached BB scan result.", error);
+      localStorage.removeItem(cacheKey);
+      setDashboardData(createEmptyDashboardData());
+      setIsCachedResult(false);
+    }
+  }, [bbTimeframes]);
 
   const filteredTimeframes = filterTimeframes(
     dashboardData.timeframes,
@@ -56,27 +106,15 @@ export default function Dashboard() {
 
       const response = await runScanner(bbTimeframes);
 
-      setDashboardData({
-        performance: {
-          downloadSeconds: response.downloadSeconds,
+      const updatedDashboardData = toDashboardData(response);
 
-          scanSeconds: response.scanSeconds,
+      setDashboardData(updatedDashboardData);
+      setIsCachedResult(false);
 
-          totalSeconds: response.totalSeconds,
-        },
-
-        generatedAt: response.generatedAt,
-
-        symbolsScanned: response.symbolsScanned,
-
-        totalMatches: response.totalMatches,
-
-        multiTimeframeMatches: response.multiTimeframeMatches,
-
-        multiTimeframe: response.multiTimeframe,
-
-        timeframes: response.timeframes,
-      });
+      localStorage.setItem(
+        getCacheKey(bbTimeframes),
+        JSON.stringify(updatedDashboardData),
+      );
     } catch (error) {
       console.error(error);
 
@@ -100,6 +138,8 @@ export default function Dashboard() {
         onRunScan={handleRunScanner}
 
         generatedAt={dashboardData.generatedAt}
+
+        isCachedResult={isCachedResult}
 
         dashboardData={dashboardData}
 
