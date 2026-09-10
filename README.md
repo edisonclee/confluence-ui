@@ -1,16 +1,158 @@
-# React + Vite
+# Confluence UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based dashboard for the **Confluence Scanner** cryptocurrency market-analysis application.
 
-Currently, two official plugins are available:
+The application provides a web interface for viewing scanner results and interacting with the backend REST API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+* Cryptocurrency scanner dashboard
+* REST API integration
+* Market-data presentation
+* Scanner result tables
+* Responsive Material UI components
+* Client-side routing
+* API communication using Axios
+* Modular component and page structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Architecture
 
-## Expanding the ESLint configuration
+```text
+┌──────────────────────────────────────┐
+│              React UI                │
+│                                      │
+│  ┌────────────┐    ┌──────────────┐ │
+│  │   Pages    │    │  Components  │ │
+│  └─────┬──────┘    └──────┬───────┘ │
+│        │                   │         │
+│        └─────────┬─────────┘         │
+│                  ▼                   │
+│           API / Axios Layer          │
+└──────────────────┬───────────────────┘
+                   │
+                   │ REST
+                   ▼
+        ┌──────────────────────┐
+        │   Confluence Scanner │
+        │    Spring Boot API   │
+        └──────────────────────┘
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Technology Stack
+
+| Area            | Technology   |
+| --------------- | ------------ |
+| Framework       | React        |
+| Build Tool      | Vite         |
+| UI Library      | Material UI  |
+| HTTP Client     | Axios        |
+| Routing         | React Router |
+| Language        | JavaScript   |
+| Package Manager | npm          |
+
+## Project Structure
+
+```text
+src/
+├── api/
+│   └── API integration
+│
+├── components/
+│   └── Reusable UI components
+│
+├── pages/
+│   └── Application pages
+│
+├── theme/
+│   └── Material UI theme
+│
+├── utils/
+│   └── Utility functions
+│
+├── App.jsx
+└── main.jsx
+```
+
+The project is structured to keep API communication, reusable components, pages, styling, and utility functions separated.
+
+## Getting Started
+
+### Requirements
+
+* Node.js
+* npm
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Start Development Server
+
+```bash
+npm run dev
+```
+
+Vite will start the development server and provide the local URL.
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+## Backend
+
+This application is designed to work with the separate Spring Boot backend:
+
+**confluence-scanner**
+
+```text
+React UI
+   │
+   │ Axios / REST
+   ▼
+Spring Boot Backend
+   │
+   ▼
+Market Data APIs
+```
+
+## Development
+
+The UI is being developed alongside the backend as the scanner functionality expands.
+
+The project is intentionally separated from the backend so that the frontend and API can be developed and deployed independently.
+
+## Project Status
+
+This is an actively developed personal project.
+
+The dashboard will continue to evolve as additional market-analysis features are added to the backend.
+
+## Planned Improvements
+
+* Expanded scanner dashboards
+* Additional technical indicators
+* Volume analysis
+* Open Interest analysis
+* Funding-rate information
+* Improved market-data visualization
+* Additional filtering and sorting options
+
+## Related Repository
+
+**confluence-scanner** — Spring Boot backend and REST API.
