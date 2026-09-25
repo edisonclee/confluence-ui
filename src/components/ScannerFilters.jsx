@@ -4,138 +4,236 @@ import {
   FormControlLabel,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 
 export default function ScannerFilters({
   filters,
-
   setFilters,
-
   bbTimeframes,
-
   setBbTimeframes,
 }) {
   function toggleTimeframe(timeframe) {
     if (bbTimeframes.includes(timeframe)) {
-      setBbTimeframes(bbTimeframes.filter((value) => value !== timeframe));
+      setBbTimeframes(
+        bbTimeframes.filter((value) => value !== timeframe),
+      );
     } else {
-      setBbTimeframes([...bbTimeframes, timeframe]);
+      setBbTimeframes([
+        ...bbTimeframes,
+        timeframe,
+      ]);
     }
   }
 
+  const timeframes = [
+    ["H1", "1H"],
+    ["H4", "4H"],
+    ["D1", "1D"],
+    ["W1", "1W"],
+    ["MN1", "1M"],
+  ];
+
   return (
-    <Box>
-      <Stack
-        direction="row"
-
-        spacing={2}
-
-        alignItems="center"
-
-        flexWrap="wrap"
+    <Stack
+      direction="row"
+      alignItems="flex-end"
+      spacing={2}
+      sx={{
+        width: "100%",
+        flexWrap: "nowrap",
+      }}
+    >
+      {/* COIN */}
+      <Box
+        sx={{
+          width: 220,
+          flexShrink: 0,
+        }}
       >
+        <Typography
+          sx={{
+            mb: 0.7,
+            color: "#91a4b8",
+            fontSize: "12px",
+            fontWeight: 600,
+            lineHeight: 1,
+          }}
+        >
+          Coin
+        </Typography>
+
         <TextField
-          label="Coin"
-
+          hiddenLabel
+          fullWidth
           size="small"
-
+          placeholder="e.g. BTC, ETH"
           value={filters.coin}
-
           onChange={(event) =>
             setFilters({
               ...filters,
-
               coin: event.target.value,
             })
           }
-
           sx={{
-            width: 160,
+            "& .MuiOutlinedInput-root": {
+              height: 38,
+              backgroundColor: "#091018",
 
-            "& .MuiInputBase-input": {
-              fontSize: "0.85rem",
+              "& fieldset": {
+                borderColor: "#31485a",
+              },
+
+              "&:hover fieldset": {
+                borderColor: "#486477",
+              },
+
+              "&.Mui-focused fieldset": {
+                borderColor: "#55c9df",
+              },
             },
 
-            "& .MuiInputLabel-root": {
-              fontSize: "0.85rem",
+            "& .MuiOutlinedInput-input": {
+              px: 1.3,
+              py: 1,
+              color: "#dce8f0",
+              fontSize: "12px",
+            },
+
+            "& .MuiOutlinedInput-input::placeholder": {
+              color: "#617486",
+              opacity: 1,
             },
           }}
         />
+      </Box>
+
+      {/* BB WIDTH */}
+      <Box
+        sx={{
+          width: 160,
+          flexShrink: 0,
+        }}
+      >
+        <Typography
+          sx={{
+            mb: 0.7,
+            color: "#91a4b8",
+            fontSize: "12px",
+            fontWeight: 600,
+            lineHeight: 1,
+          }}
+        >
+          BB Width
+        </Typography>
 
         <TextField
-          label="BB ≥ %"
-
+          hiddenLabel
+          fullWidth
           type="number"
-
           size="small"
-
+          placeholder="0.00"
           value={filters.minBbWidth}
-
           onChange={(event) =>
             setFilters({
               ...filters,
-
               minBbWidth: event.target.value,
             })
           }
-
           sx={{
-            width: 90,
+            "& .MuiOutlinedInput-root": {
+              height: 38,
+              backgroundColor: "#091018",
 
-            "& .MuiInputBase-input": {
-              fontSize: "0.85rem",
+              "& fieldset": {
+                borderColor: "#31485a",
+              },
+
+              "&:hover fieldset": {
+                borderColor: "#486477",
+              },
+
+              "&.Mui-focused fieldset": {
+                borderColor: "#55c9df",
+              },
             },
 
-            "& .MuiInputLabel-root": {
-              fontSize: "0.85rem",
+            "& .MuiOutlinedInput-input": {
+              px: 1.3,
+              py: 1,
+              color: "#dce8f0",
+              fontSize: "12px",
+            },
+
+            "& .MuiOutlinedInput-input::placeholder": {
+              color: "#617486",
+              opacity: 1,
             },
           }}
         />
+      </Box>
+
+      {/* TIMEFRAMES */}
+      <Box
+        sx={{
+          flex: 1,
+          minWidth: 0,
+        }}
+      >
+        <Typography
+          sx={{
+            mb: 0.7,
+            color: "#91a4b8",
+            fontSize: "12px",
+            fontWeight: 600,
+            lineHeight: 1,
+          }}
+        >
+          Timeframes
+        </Typography>
 
         <Stack
           direction="row"
-
-          spacing={0}
-
           alignItems="center"
+          sx={{
+            height: 38,
+            whiteSpace: "nowrap",
+          }}
         >
-          {[
-            ["H1", "1H"],
-
-            ["H4", "4H"],
-
-            ["D1", "1D"],
-
-            ["W1", "1W"],
-
-            ["MN1", "1M"],
-          ].map(([value, label]) => (
+          {timeframes.map(([value, label]) => (
             <FormControlLabel
               key={value}
-
-              sx={{
-                mr: 0.5,
-
-                "& .MuiFormControlLabel-label": {
-                  fontSize: "0.85rem",
-                },
-              }}
-
               control={
                 <Checkbox
                   size="small"
-
                   checked={bbTimeframes.includes(value)}
-
                   onChange={() => toggleTimeframe(value)}
+                  sx={{
+                    p: 0.5,
+                    mr: 0.4,
+                    color: "#52697b",
+
+                    "&.Mui-checked": {
+                      color: "#55c9df",
+                    },
+                  }}
                 />
               }
-
               label={label}
+              sx={{
+                m: 0,
+                mr: 1.3,
+
+                "& .MuiFormControlLabel-label": {
+                  color: "#a7b8c7",
+                  fontSize: "12px",
+                  fontWeight: 500,
+                },
+              }}
             />
           ))}
         </Stack>
-      </Stack>
-    </Box>
+      </Box>
+    </Stack>
   );
 }

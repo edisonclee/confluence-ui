@@ -1,0 +1,1088 @@
+:root {
+  --app-bg: #080d12;
+  --app-bg-soft: #0a1016;
+
+  --panel: #0e151d;
+  --panel-raised: #111a23;
+  --panel-hover: #14202a;
+
+  --border: #253341;
+  --border-soft: #1b2732;
+  --border-strong: #344654;
+
+  --text: #e7edf2;
+  --text-soft: #a3b0bc;
+  --text-muted: #697887;
+
+  --cyan: #55c9df;
+  --cyan-bright: #68d8eb;
+  --cyan-dark: #123d47;
+
+  --green: #52d6a5;
+  --red: #ff6b72;
+  --yellow: #e6bd69;
+
+  --summary-bg: #103942;
+
+  --radius: 8px;
+  --radius-small: 5px;
+
+  --content-width: 1440px;
+}
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+html {
+  min-width: 320px;
+  background: var(--app-bg);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% -20%,
+      rgba(48, 104, 120, 0.08),
+      transparent 40%
+    ),
+    var(--app-bg);
+
+  color: var(--text);
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   APP SHELL
+   ========================================================= */
+
+.app-shell {
+  min-height: 100vh;
+  background: var(--app-bg);
+}
+
+.app-header {
+  position: sticky !important;
+  top: 0;
+
+  z-index: 100;
+
+  background: rgba(9, 14, 20, 0.96) !important;
+
+  border-bottom: 1px solid var(--border) !important;
+
+  box-shadow: none !important;
+
+  backdrop-filter: blur(12px);
+}
+
+.app-toolbar {
+  width: 100%;
+  max-width: var(--content-width);
+
+  min-height: 64px !important;
+
+  margin: 0 auto;
+
+  padding: 0 24px !important;
+}
+
+.app-brand {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  min-width: 230px;
+}
+
+.app-brand-icon {
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--cyan);
+
+  border-radius: 7px;
+
+  color: var(--cyan);
+
+  background: rgba(61, 193, 218, 0.08);
+}
+
+.app-brand-name {
+  font-size: 14px !important;
+
+  font-weight: 800 !important;
+
+  line-height: 1.1 !important;
+
+  letter-spacing: 0.03em;
+
+  text-transform: uppercase;
+}
+
+.app-brand-subtitle {
+  margin-top: 2px;
+
+  color: var(--text-muted) !important;
+
+  font-size: 7px !important;
+
+  font-weight: 600 !important;
+
+  letter-spacing: 0.14em !important;
+
+  text-transform: uppercase;
+}
+
+.app-live-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-left: auto;
+
+  color: var(--text-muted);
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  white-space: nowrap;
+}
+
+.app-live-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+  box-shadow: 0 0 8px rgba(82, 214, 165, 0.5);
+}
+
+/* =========================================================
+   TOP NAVIGATION
+   ========================================================= */
+
+.app-navigation {
+  min-height: 48px !important;
+
+  background: rgba(6, 11, 16, 0.65);
+
+  border-top: 1px solid rgba(37, 51, 65, 0.5);
+}
+
+.app-navigation .MuiTabs-flexContainer {
+  justify-content: center;
+
+  gap: 4px;
+}
+
+.app-navigation .MuiTab-root {
+  min-height: 34px !important;
+
+  margin: 7px 0;
+
+  padding: 0 17px !important;
+
+  border: 1px solid transparent;
+
+  border-radius: 5px;
+
+  color: #71808e !important;
+
+  font-size: 11px !important;
+
+  font-weight: 500 !important;
+
+  letter-spacing: 0.01em;
+
+  text-transform: none !important;
+}
+
+.app-navigation .MuiTab-root:hover {
+  color: var(--text) !important;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.app-navigation .MuiTab-root.Mui-selected {
+  color: var(--text) !important;
+
+  border-color: var(--border-strong);
+
+  background: #101922;
+}
+
+.app-navigation .MuiTabs-indicator {
+  display: none;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.app-content {
+  width: 100%;
+
+  min-height: calc(100vh - 112px);
+
+  padding: 28px 24px 60px;
+}
+
+.scanner-page {
+  width: 100%;
+
+  max-width: var(--content-width);
+
+  margin: 0 auto;
+}
+
+/* =========================================================
+   PAGE HERO
+   ========================================================= */
+
+.scanner-hero {
+  position: relative;
+
+  margin-bottom: 20px;
+
+  padding: 8px 0 0;
+}
+
+.scanner-eyebrow {
+  margin-bottom: 8px;
+
+  color: var(--cyan) !important;
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 9px !important;
+
+  font-weight: 600 !important;
+
+  letter-spacing: 0.08em !important;
+
+  text-transform: uppercase;
+}
+
+.scanner-title {
+  margin: 0 !important;
+
+  color: var(--text) !important;
+
+  font-size: 27px !important;
+
+  font-weight: 750 !important;
+
+  letter-spacing: -0.025em !important;
+
+  line-height: 1.15 !important;
+}
+
+.scanner-description {
+  max-width: 760px;
+
+  margin-top: 8px !important;
+
+  color: var(--text-soft) !important;
+
+  font-size: 12px !important;
+
+  line-height: 1.6 !important;
+}
+
+.scanner-status {
+  position: absolute;
+
+  right: 0;
+  bottom: 1px;
+
+  text-align: right;
+}
+
+.scanner-status-ready {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 7px;
+
+  color: var(--green);
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.scanner-status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--green);
+
+  box-shadow: 0 0 7px rgba(82, 214, 165, 0.45);
+}
+
+.scanner-status-time {
+  margin-top: 5px;
+
+  color: var(--text-muted);
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.05em;
+}
+
+/* =========================================================
+   FILTER / CONTROL PANEL
+   ========================================================= */
+
+.scanner-filter-panel {
+  width: 100%;
+
+  padding: 19px 13px !important;
+
+  border: 1px solid var(--border) !important;
+
+  border-radius: var(--radius) !important;
+
+  background: var(--panel) !important;
+
+  box-shadow: none !important;
+}
+
+.scanner-filter-panel .MuiStack-root {
+  min-height: 74px;
+}
+
+.scanner-filter-panel .MuiTextField-root,
+.scanner-filter-panel .MuiFormControl-root {
+  min-width: 0;
+}
+
+.scanner-filter-panel .MuiInputBase-root {
+  height: 34px;
+
+  border-radius: 5px;
+
+  background: #0b1219;
+}
+
+.scanner-filter-panel .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-strong) !important;
+}
+
+.scanner-filter-panel .MuiInputBase-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #486071 !important;
+}
+
+.scanner-filter-panel
+  .MuiInputBase-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--cyan) !important;
+}
+
+.scanner-filter-panel .MuiInputBase-input {
+  padding: 8px 10px;
+
+  color: var(--text) !important;
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 10px !important;
+}
+
+.scanner-filter-panel .MuiInputLabel-root {
+  color: var(--text-muted);
+
+  font-size: 10px;
+}
+
+.scanner-filter-panel .MuiInputLabel-root.Mui-focused {
+  color: var(--cyan);
+}
+
+/* =========================================================
+   PRIMARY BUTTON
+   ========================================================= */
+
+.scanner-run-button {
+  min-width: 98px !important;
+
+  height: 34px !important;
+
+  border-radius: 5px !important;
+
+  background: var(--cyan) !important;
+
+  color: #071117 !important;
+
+  font-size: 10px !important;
+
+  font-weight: 750 !important;
+
+  text-transform: none !important;
+
+  box-shadow: none !important;
+}
+
+.scanner-run-button:hover {
+  background: var(--cyan-bright) !important;
+
+  box-shadow: none !important;
+}
+
+.scanner-run-button:disabled {
+  opacity: 0.55;
+}
+
+/* =========================================================
+   SUMMARY STRIP
+   ========================================================= */
+
+.scanner-summary {
+  display: flex;
+
+  align-items: center;
+
+  min-height: 34px;
+
+  margin: 20px 0;
+
+  padding: 0 12px;
+
+  border-radius: 6px;
+
+  background: var(--summary-bg);
+}
+
+.scanner-summary .summary-primary {
+  color: #d7e8ed !important;
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 10px !important;
+
+  font-weight: 650 !important;
+}
+
+.scanner-summary .summary-secondary {
+  color: #77939d !important;
+
+  font-size: 10px !important;
+}
+
+.scanner-summary .summary-dot {
+  width: 6px;
+  height: 6px;
+
+  margin-right: 8px;
+
+  border-radius: 50%;
+
+  background: var(--cyan);
+}
+
+.scanner-summary .summary-performance {
+  margin-left: auto;
+
+  color: #58727b !important;
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 8px !important;
+}
+
+/* =========================================================
+   BB RESULT GRID
+   ========================================================= */
+
+.bb-results-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  align-items: start;
+}
+
+.bb-results-grid .MuiAccordion-root {
+  margin: 0 !important;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius) !important;
+
+  background: var(--panel);
+
+  box-shadow: none;
+
+  overflow: hidden;
+}
+
+.bb-results-grid .MuiAccordion-root::before {
+  display: none;
+}
+
+.bb-results-grid .MuiAccordionSummary-root {
+  min-height: 42px !important;
+
+  padding: 0 10px !important;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.bb-results-grid
+  .MuiAccordionSummary-root.Mui-expanded {
+  min-height: 42px !important;
+}
+
+.bb-results-grid .MuiAccordionSummary-content {
+  margin: 0 !important;
+}
+
+.bb-results-grid .MuiAccordionDetails-root {
+  padding: 0 !important;
+}
+
+.bb-results-grid .MuiAccordionSummary-expandIconWrapper {
+  display: none;
+}
+
+.bb-results-grid .MuiTypography-root {
+  font-size: 10px;
+}
+
+.bb-results-grid .MuiTable-root {
+  background: transparent;
+}
+
+.bb-results-grid .MuiTableCell-root {
+  height: 35px;
+
+  padding: 7px 10px;
+
+  border-color: var(--border-soft);
+
+  color: var(--text-soft);
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 9px;
+}
+
+.bb-results-grid .MuiTableHead-root .MuiTableCell-root {
+  height: 32px;
+
+  background: #101923;
+
+  color: #7e8e9c;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+.bb-results-grid .MuiTableBody-root .MuiTableRow-root:hover {
+  background: rgba(83, 201, 223, 0.035);
+}
+
+.bb-results-grid .MuiTableBody-root .MuiTableCell-root:first-child {
+  color: #d5dce2;
+}
+
+.bb-results-grid .MuiPagination-root {
+  padding: 8px 10px;
+}
+
+/* =========================================================
+   GENERIC TABLES
+   ========================================================= */
+
+.scanner-table-panel {
+  border: 1px solid var(--border) !important;
+
+  border-radius: var(--radius) !important;
+
+  background: var(--panel) !important;
+
+  box-shadow: none !important;
+
+  overflow: hidden;
+}
+
+.scanner-table-panel .MuiTable-root {
+  background: transparent;
+}
+
+.scanner-table-panel .MuiTableCell-root {
+  height: 36px;
+
+  padding: 8px 10px;
+
+  border-color: var(--border-soft);
+
+  color: var(--text-soft);
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 9px;
+}
+
+.scanner-table-panel .MuiTableHead-root .MuiTableCell-root {
+  height: 34px;
+
+  background: #101923;
+
+  color: #81909d;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+
+  text-transform: uppercase;
+}
+
+.scanner-table-panel
+  .MuiTableBody-root
+  .MuiTableRow-root:hover {
+  background: rgba(83, 201, 223, 0.035);
+}
+
+.scanner-table-panel .MuiLink-root {
+  color: #dce6eb;
+
+  text-decoration: none;
+}
+
+.scanner-table-panel .MuiLink-root:hover {
+  color: var(--cyan);
+}
+
+/* =========================================================
+   OI RADAR
+   ========================================================= */
+
+.oi-radar-page .MuiPaper-root {
+  border: 1px solid var(--border);
+
+  background: var(--panel);
+
+  box-shadow: none;
+}
+
+.oi-radar-page .MuiTableContainer-root {
+  border-radius: var(--radius);
+}
+
+.oi-radar-page .MuiTableCell-root {
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 9px;
+}
+
+.oi-radar-page .MuiTableHead-root .MuiTableCell-root {
+  color: #81909d;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  font-size: 8px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.04em;
+}
+
+.oi-radar-page .MuiTableBody-root .MuiTableCell-root {
+  color: #b7c1c9;
+
+  border-color: var(--border-soft);
+}
+
+.oi-radar-page .MuiTableBody-root .MuiTableRow-root:hover {
+  background: rgba(83, 201, 223, 0.035);
+}
+
+/* =========================================================
+   TRANSITION SCANNER
+   ========================================================= */
+
+.transition-scan-panel {
+  padding: 13px 14px;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius);
+
+  background: var(--panel);
+}
+
+.transition-scan-panel .MuiTypography-root {
+  font-size: 10px;
+}
+
+.transition-scan-panel .scan-description {
+  color: var(--text-muted);
+
+  font-family:
+    "Roboto Mono",
+    "SFMono-Regular",
+    Consolas,
+    monospace;
+
+  font-size: 8px;
+}
+
+.transition-table {
+  margin-top: 20px;
+}
+
+/* =========================================================
+   STATUS / COLORS
+   ========================================================= */
+
+.positive-value {
+  color: var(--green) !important;
+}
+
+.negative-value {
+  color: var(--red) !important;
+}
+
+.cyan-value {
+  color: var(--cyan) !important;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.MuiBackdrop-root {
+  background: rgba(4, 8, 12, 0.78) !important;
+
+  backdrop-filter: blur(4px);
+}
+
+.MuiCircularProgress-root {
+  color: var(--cyan) !important;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .app-toolbar {
+    padding: 0 16px !important;
+  }
+
+  .app-brand {
+    min-width: auto;
+  }
+
+  .app-live-status {
+    display: none;
+  }
+
+  .app-content {
+    padding: 22px 16px 50px;
+  }
+
+  .bb-results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .scanner-status {
+    position: static;
+
+    margin-top: 15px;
+
+    text-align: left;
+  }
+
+  .scanner-status-ready {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-toolbar {
+    min-height: 56px !important;
+  }
+
+  .app-navigation .MuiTab-root {
+    min-width: 0 !important;
+
+    padding: 0 10px !important;
+
+    font-size: 9px !important;
+  }
+
+  .scanner-title {
+    font-size: 23px !important;
+  }
+
+  .scanner-description {
+    font-size: 11px !important;
+  }
+
+  .scanner-summary {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    padding: 9px 10px;
+  }
+
+  .scanner-summary .summary-performance {
+    width: 100%;
+
+    margin-left: 14px;
+  }
+}
+
+/* =========================================
+   BB50 TOUCH SCANNER
+   ========================================= */
+
+.bb50-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 20px;
+}
+
+.bb50-title {
+  color: #55c9df !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.02em;
+}
+
+.bb50-description {
+  margin-top: 7px !important;
+  color: #91a4b8 !important;
+  font-size: 12px !important;
+}
+
+.bb50-status {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.bb50-status-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+
+  color: #55dfb0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.bb50-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #55dfb0;
+  box-shadow: 0 0 7px rgba(85, 223, 176, 0.65);
+}
+
+.bb50-last-scan {
+  margin-top: 5px !important;
+  color: #62778c !important;
+  font-family: monospace !important;
+  font-size: 9px !important;
+}
+
+
+/* =========================================
+   BB50 FILTERS
+   ========================================= */
+
+.bb50-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  width: 100%;
+}
+
+.bb50-filter-field {
+  width: 135px;
+  flex-shrink: 0;
+}
+
+.bb50-filter-width {
+  width: 135px;
+}
+
+.bb50-timeframe-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.bb50-filter-label {
+  margin-bottom: 7px !important;
+
+  color: #8fa6ba !important;
+
+  font-size: 12px !important;
+  font-weight: 600 !important;
+
+  line-height: 1 !important;
+}
+
+.bb50-timeframes {
+  height: 40px;
+}
+
+.bb50-timeframes .MuiFormControlLabel-root {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+.bb50-timeframes .MuiFormControlLabel-label {
+  color: #9fb0c0;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.bb50-timeframes .MuiCheckbox-root {
+  padding: 7px;
+}
+
+.bb50-filters .MuiTextField-root {
+  width: 100%;
+}
+
+.bb50-filters .MuiOutlinedInput-root {
+  height: 40px;
+}
+
+.bb50-filters .MuiOutlinedInput-input {
+  padding: 9px 11px;
+  font-size: 12px;
+}
+
+.bb50-filters .MuiOutlinedInput-notchedOutline {
+  border-color: #26394a;
+}
+
+.bb50-filters .MuiOutlinedInput-root:hover
+.MuiOutlinedInput-notchedOutline {
+  border-color: #3b596d;
+}
+
+.bb50-filters .MuiOutlinedInput-root.Mui-focused
+.MuiOutlinedInput-notchedOutline {
+  border-color: #55c9df;
+}
