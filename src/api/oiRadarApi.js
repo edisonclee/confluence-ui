@@ -1,7 +1,25 @@
 import api from "./axios";
 
-export async function scanOiRadar() {
-  const response = await api.post("/api/oi-radar/scan");
+export async function scanOiRadar(
+  minimumMarketCap,
+  maximumMarketCap
+) {
+  const params = {};
+
+  if (minimumMarketCap !== "") {
+    params.minMarketCap = minimumMarketCap;
+  }
+
+  if (maximumMarketCap !== "") {
+    params.maxMarketCap = maximumMarketCap;
+  }
+
+  const response = await api.post(
+    "/api/oi-radar/scan",
+    null,
+    { params }
+  );
+
   return response.data;
 }
 
