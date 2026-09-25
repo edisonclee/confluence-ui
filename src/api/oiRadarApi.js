@@ -1,32 +1,47 @@
 import api from "./axios";
 
 export async function scanOiRadar(
-  minimumMarketCap,
-  maximumMarketCap
+  minMarketCap = null,
+  maxMarketCap = null
 ) {
   const params = {};
 
-  if (minimumMarketCap !== "") {
-    params.minMarketCap = minimumMarketCap;
+  if (
+    minMarketCap !== null &&
+    minMarketCap !== undefined &&
+    minMarketCap !== ""
+  ) {
+    params.minMarketCap = minMarketCap;
   }
 
-  if (maximumMarketCap !== "") {
-    params.maxMarketCap = maximumMarketCap;
+  if (
+    maxMarketCap !== null &&
+    maxMarketCap !== undefined &&
+    maxMarketCap !== ""
+  ) {
+    params.maxMarketCap = maxMarketCap;
   }
 
   const response = await api.post(
     "/api/oi-radar/scan",
     null,
-    { params }
+    {
+      params,
+    }
   );
 
   return response.data;
 }
 
-export async function getOiRadarPage(page = 0) {
-  const response = await api.get("/api/oi-radar", {
-    params: { page },
-  });
+export async function getOiRadarPage(
+  page = 0
+) {
+  const response = await api.get(
+    "/api/oi-radar",
+    {
+      params: { page },
+    }
+  );
 
   return response.data;
 }
@@ -34,30 +49,42 @@ export async function getOiRadarPage(page = 0) {
 /**
  * Loads all pages from the cached radar scan.
  *
- * The backend performs the actual scan only once through POST /scan.
+ * The backend performs the actual scan only once
+ * through POST /scan.
  * Subsequent GET requests only read the cached result.
  */
-export async function getAllOiRadarResults(firstPage) {
+export async function getAllOiRadarResults(
+  firstPage
+) {
   if (!firstPage) {
     return [];
   }
 
-  const totalPages = Number(firstPage.totalPages || 0);
+  const totalPages = Number(
+    firstPage.totalPages || 0
+  );
 
   if (totalPages <= 1) {
     return firstPage.results || [];
   }
 
   const remainingPages = Array.from(
-    { length: totalPages - 1 },
+    {
+      length: totalPages - 1,
+    },
     (_, index) => index + 1
   );
 
   const pages = await Promise.all(
-    remainingPages.map((page) => getOiRadarPage(page))
+    remainingPages.map((page) =>
+      getOiRadarPage(page)
+    )
   );
 
-  return [firstPage, ...pages].flatMap(
+  return [
+    firstPage,
+    ...pages,
+  ].flatMap(
     (page) => page?.results || []
   );
 }

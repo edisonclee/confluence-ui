@@ -3,70 +3,66 @@ import { useState } from "react";
 import {
   AppBar,
   Box,
-  Tab,
   Tabs,
+  Tab,
   Toolbar,
   Typography,
 } from "@mui/material";
+
+import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 
 import Dashboard from "./pages/Dashboard";
 import TransitionDashboard from "./pages/TransitionDashboard";
 import OiRadar from "./pages/OiRadar";
 
 export default function App() {
-
   const [tab, setTab] = useState(0);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box className="app-shell">
+      <AppBar
+        position="sticky"
+        className="app-header"
+      >
+        <Toolbar className="app-toolbar">
+          <Box className="app-brand">
+            <Box className="app-brand-icon">
+              <TrackChangesIcon fontSize="small" />
+            </Box>
 
-      <AppBar position="static">
+            <Box>
+              <Typography className="app-brand-name">
+                Confluence
+              </Typography>
 
-        <Toolbar>
-
-          <Typography
-            variant="h6"
-            sx={{ flexGrow: 1 }}
-          >
-            Confluence Scanner
-          </Typography>
-
+              <Typography className="app-brand-subtitle">
+                Market Scanner
+              </Typography>
+            </Box>
+          </Box>
         </Toolbar>
 
         <Tabs
           value={tab}
-          onChange={(event, value) =>
-            setTab(value)
-          }
+          onChange={(event, value) => setTab(value)}
           centered
+          className="app-navigation"
         >
-
           <Tab label="BB50 Touch Scanner" />
 
           <Tab label="Transition Play Scanner" />
 
-          <Tab label="OI Radar" />
-
+          <Tab label="OI Scanner" />
         </Tabs>
-
       </AppBar>
 
-      <Box sx={{ mt: 2 }}>
+      <Box className="app-content">
+        {tab === 0 && <Dashboard />}
 
-        {tab === 0 && (
-          <Dashboard />
-        )}
+        {tab === 1 && <TransitionDashboard />}
 
-        {tab === 1 && (
-          <TransitionDashboard />
-        )}
-
-        {tab === 2 && (
-          <OiRadar />
-        )}
-
+        {tab === 2 && <OiRadar />}
       </Box>
-
     </Box>
   );
 }

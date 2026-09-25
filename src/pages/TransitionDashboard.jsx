@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 
 import { runTransitionScanner } from "../api/transitionScannerApi";
@@ -13,11 +14,8 @@ export default function TransitionDashboard() {
 
   const [dashboardData, setDashboardData] = useState({
     scanTime: null,
-
     durationSeconds: 0,
-
     symbolsScanned: 0,
-
     signals: [],
   });
 
@@ -40,7 +38,6 @@ export default function TransitionDashboard() {
   return (
     <Container
       maxWidth="xl"
-
       sx={{
         mt: 4,
         mb: 4,
@@ -48,15 +45,16 @@ export default function TransitionDashboard() {
     >
       <TransitionDashboardHeader
         loading={loading}
-
         onRunScan={handleRunScanner}
-
         scanTime={dashboardData.scanTime}
-
         dashboardData={dashboardData}
       />
 
-      <TransitionResultTable results={dashboardData.signals} />
+      <Box sx={{ mt: 2 }}>
+        <TransitionResultTable
+          results={dashboardData.signals}
+        />
+      </Box>
 
       <LoadingOverlay open={loading} />
     </Container>

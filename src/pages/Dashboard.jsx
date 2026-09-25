@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 
 import { runScanner } from "../api/scannerApi";
 
@@ -9,7 +10,10 @@ import MultiTimeframeTable from "../components/MultiTimeframeTable";
 import ResultTable from "../components/ResultTable";
 import LoadingOverlay from "../components/LoadingOverlay";
 
-import { filterTimeframes, filterMultiTimeframe } from "../utils/filterResults";
+import {
+  filterTimeframes,
+  filterMultiTimeframe,
+} from "../utils/filterResults";
 
 const BB_SCAN_CACHE_PREFIX = "confluence-scanner:bb-scan:";
 
@@ -48,17 +52,23 @@ function toDashboardData(response) {
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
 
-  const [dashboardData, setDashboardData] = useState(createEmptyDashboardData);
+  const [dashboardData, setDashboardData] = useState(
+    createEmptyDashboardData,
+  );
 
   const [isCachedResult, setIsCachedResult] = useState(false);
 
   const [filters, setFilters] = useState({
     coin: "",
-
     minBbWidth: "",
   });
 
-  const [bbTimeframes, setBbTimeframes] = useState(["H1", "H4", "D1", "W1"]);
+  const [bbTimeframes, setBbTimeframes] = useState([
+    "H1",
+    "H4",
+    "D1",
+    "W1",
+  ]);
 
   useEffect(() => {
     const cacheKey = getCacheKey(bbTimeframes);
@@ -81,8 +91,13 @@ export default function Dashboard() {
       setDashboardData(cachedData);
       setIsCachedResult(true);
     } catch (error) {
-      console.warn("Unable to restore cached BB scan result.", error);
+      console.warn(
+        "Unable to restore cached BB scan result.",
+        error,
+      );
+
       localStorage.removeItem(cacheKey);
+
       setDashboardData(createEmptyDashboardData());
       setIsCachedResult(false);
     }
@@ -90,13 +105,11 @@ export default function Dashboard() {
 
   const filteredTimeframes = filterTimeframes(
     dashboardData.timeframes,
-
     filters,
   );
 
   const filteredMultiTimeframe = filterMultiTimeframe(
     dashboardData.multiTimeframe,
-
     filters,
   );
 
@@ -106,7 +119,8 @@ export default function Dashboard() {
 
       const response = await runScanner(bbTimeframes);
 
-      const updatedDashboardData = toDashboardData(response);
+      const updatedDashboardData =
+        toDashboardData(response);
 
       setDashboardData(updatedDashboardData);
       setIsCachedResult(false);
@@ -126,45 +140,48 @@ export default function Dashboard() {
 
   return (
     <Container
-      maxWidth="xl"
-      sx={{
-        mt: 4,
-        mb: 4,
-      }}
+      maxWidth={false}
+      className="scanner-page bb-scanner-page"
+      disableGutters
     >
       <DashboardHeader
         loading={loading}
-
         onRunScan={handleRunScanner}
-
         generatedAt={dashboardData.generatedAt}
-
         isCachedResult={isCachedResult}
-
         dashboardData={dashboardData}
-
         filters={filters}
-
         setFilters={setFilters}
-
         bbTimeframes={bbTimeframes}
-
         setBbTimeframes={setBbTimeframes}
       />
 
-      {filteredMultiTimeframe.length > 0 && (
-        <MultiTimeframeTable results={filteredMultiTimeframe} />
-      )}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            md: "repeat(2, minmax(0, 1fr))",
+            lg: "repeat(3, minmax(0, 1fr))",
+          },
+          gap: 2,
+          alignItems: "stretch",
+        }}
+      >
+        {filteredMultiTimeframe.length > 0 && (
+          <MultiTimeframeTable
+            results={filteredMultiTimeframe}
+          />
+        )}
 
-      {filteredTimeframes.map((timeframe) => (
-        <ResultTable
-          key={timeframe.timeframe}
-
-          title={`${timeframe.chartTimeframeDisplayName} Chart Timeframe | ${timeframe.bbTimeframeDisplayName} BB Timeframe`}
-
-          results={timeframe.results}
-        />
-      ))}
+        {filteredTimeframes.map((timeframe) => (
+          <ResultTable
+            key={timeframe.timeframe}
+            title={`${timeframe.bbTimeframeDisplayName} BB Timeframe`}
+            results={timeframe.results}
+          />
+        ))}
+      </Box>
 
       <LoadingOverlay open={loading} />
     </Container>

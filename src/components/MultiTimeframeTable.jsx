@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Chip,
+  Box,
   Link,
   Pagination,
   Stack,
@@ -16,11 +13,23 @@ import {
   Typography,
 } from "@mui/material";
 
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 const PAGE_SIZE = 10;
 
-export default function MultiTimeframeTable({ results }) {
+const COLORS = {
+  panel: "#0d141c",
+  panelHeader: "#101a23",
+  marketColumn: "#13212c",
+  detailColumn: "#101a23",
+  border: "#26394a",
+  borderSoft: "#1d2d3b",
+  cyan: "#55c9df",
+  text: "#dce8f0",
+  muted: "#718798",
+};
+
+export default function MultiTimeframeTable({
+  results,
+}) {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -29,137 +38,287 @@ export default function MultiTimeframeTable({ results }) {
 
   const sortedResults = useMemo(() => {
     return [...results].sort((a, b) => {
-      if (b.timeframes.length !== a.timeframes.length) {
-        return b.timeframes.length - a.timeframes.length;
+      if (
+        b.timeframes.length !==
+        a.timeframes.length
+      ) {
+        return (
+          b.timeframes.length -
+          a.timeframes.length
+        );
       }
 
       return a.symbol.localeCompare(b.symbol);
     });
   }, [results]);
 
-  const pageCount = Math.ceil(sortedResults.length / PAGE_SIZE);
+  const pageCount = Math.ceil(
+    sortedResults.length / PAGE_SIZE,
+  );
 
   const pagedResults = sortedResults.slice(
     (page - 1) * PAGE_SIZE,
-
     page * PAGE_SIZE,
   );
 
-  return (
-    <Accordion
-      defaultExpanded
+  const emptyRows = Math.max(
+    0,
+    PAGE_SIZE - pagedResults.length,
+  );
 
+  return (
+    <Box
       sx={{
-        mt: 2,
+        width: "100%",
+        height: "100%",
+        minWidth: 0,
+
+        border: `1px solid ${COLORS.border}`,
+        borderRadius: "7px",
+        overflow: "hidden",
+
+        backgroundColor: COLORS.panel,
+
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Stack
-          direction="row"
+      {/* HEADER */}
+      <Box
+        sx={{
+          minHeight: 38,
+          px: 1.5,
 
-          justifyContent="space-between"
+          display: "flex",
+          alignItems: "center",
 
-          alignItems="center"
-
-          width="100%"
+          backgroundColor: COLORS.panelHeader,
+          borderBottom: `1px solid ${COLORS.border}`,
+        }}
+      >
+        <Typography
+          sx={{
+            color: COLORS.text,
+            fontSize: "13px",
+            fontWeight: 600,
+          }}
         >
-          <Typography fontWeight={600}>⭐ Multi-Timeframe</Typography>
+          Multi-Timeframe
+        </Typography>
 
-          <Chip
-            label={`${results.length} Matches`}
+        <Typography
+          sx={{
+            ml: "auto",
+            color: COLORS.muted,
+            fontFamily: "monospace",
+            fontSize: "10px",
+            fontWeight: 600,
+            letterSpacing: "0.04em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {results.length} MATCHES
+        </Typography>
+      </Box>
 
-            size="small"
-          />
-        </Stack>
-      </AccordionSummary>
+      {/* TABLE */}
+      <Table
+        size="small"
+        sx={{
+          tableLayout: "fixed",
+          width: "100%",
+        }}
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell
+              sx={{
+                width: "32%",
+                py: 1.1,
+                px: 1.5,
 
-      <AccordionDetails>
-        {results.length === 0 ? (
-          <Typography color="text.secondary">
-            No multi-timeframe matches.
-          </Typography>
-        ) : (
-          <>
-            <Table
-              size="small"
+                backgroundColor: COLORS.marketColumn,
+                borderBottom: `1px solid ${COLORS.border}`,
 
-              stickyHeader
+                color: "#8da2b3",
+                fontSize: "9px",
+                fontWeight: 700,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+              }}
             >
-              <TableHead>
-                <TableRow>
-                  <TableCell>Coin</TableCell>
+              Market
+            </TableCell>
 
-                  <TableCell>Matching Timeframes</TableCell>
-                </TableRow>
-              </TableHead>
+            <TableCell
+              sx={{
+                width: "68%",
+                py: 1.1,
+                px: 1.5,
 
-              <TableBody>
-                {pagedResults.map((result) => (
-                  <TableRow
-                    hover
+                backgroundColor: COLORS.detailColumn,
+                borderBottom: `1px solid ${COLORS.border}`,
 
-                    key={result.symbol}
-                  >
-                    <TableCell>
-                      <Link
-                        href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
+                color: "#8da2b3",
+                fontSize: "9px",
+                fontWeight: 700,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+              }}
+            >
+              Matching Timeframes
+            </TableCell>
+          </TableRow>
+        </TableHead>
 
-                        target="_blank"
+        <TableBody>
+          {pagedResults.map((result) => (
+            <TableRow
+              key={result.symbol}
+              sx={{
+                height: 41,
 
-                        rel="noopener noreferrer"
-
-                        underline="hover"
-                      >
-                        {result.symbol}
-                      </Link>
-                    </TableCell>
-
-                    <TableCell>
-                      {result.timeframes.map((timeframe) => (
-                        <Chip
-                          key={timeframe}
-
-                          label={timeframe}
-
-                          size="small"
-
-                          sx={{
-                            mr: 0.5,
-
-                            mb: 0.5,
-                          }}
-                        />
-                      ))}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-
-            {pageCount > 1 && (
-              <Stack
-                direction="row"
-
-                justifyContent="flex-end"
-
+                "&:hover td": {
+                  backgroundColor: "#162632",
+                },
+              }}
+            >
+              <TableCell
                 sx={{
-                  mt: 2,
+                  px: 1.5,
+                  py: 0.8,
+
+                  backgroundColor: COLORS.marketColumn,
+                  borderBottom: `1px solid ${COLORS.borderSoft}`,
                 }}
               >
-                <Pagination
-                  page={page}
+                <Link
+                  href={`https://www.tradingview.com/chart/?symbol=BITUNIX:${result.symbol}.P`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  underline="hover"
+                  sx={{
+                    color: COLORS.cyan,
+                    fontSize: "10px",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {result.symbol}
+                </Link>
 
-                  count={pageCount}
+                <Typography
+                  component="span"
+                  sx={{
+                    color: "#7c91a0",
+                    fontSize: "10px",
+                    fontFamily: "monospace",
+                    ml: 0.5,
+                  }}
+                >
+                  / USDT
+                </Typography>
+              </TableCell>
 
-                  color="primary"
+              <TableCell
+                sx={{
+                  px: 1.5,
+                  py: 0.8,
 
-                  onChange={(event, value) => setPage(value)}
+                  backgroundColor: COLORS.detailColumn,
+                  borderBottom: `1px solid ${COLORS.borderSoft}`,
+                }}
+              >
+                <Stack
+                  direction="row"
+                  spacing={1.5}
+                >
+                  {result.timeframes.map(
+                    (timeframe) => (
+                      <Typography
+                        key={timeframe}
+                        sx={{
+                          color: "#d3e3ec",
+                          fontFamily: "monospace",
+                          fontSize: "10px",
+                        }}
+                      >
+                        {timeframe}
+                      </Typography>
+                    ),
+                  )}
+                </Stack>
+              </TableCell>
+            </TableRow>
+          ))}
+
+          {/* BLANK ROWS */}
+          {Array.from({ length: emptyRows }).map(
+            (_, index) => (
+              <TableRow
+                key={`empty-${index}`}
+                sx={{
+                  height: 41,
+                }}
+              >
+                <TableCell
+                  sx={{
+                    backgroundColor:
+                      COLORS.marketColumn,
+                    borderBottom: `1px solid ${COLORS.borderSoft}`,
+                  }}
                 />
-              </Stack>
-            )}
-          </>
+
+                <TableCell
+                  sx={{
+                    backgroundColor:
+                      COLORS.detailColumn,
+                    borderBottom: `1px solid ${COLORS.borderSoft}`,
+                  }}
+                />
+              </TableRow>
+            ),
+          )}
+        </TableBody>
+      </Table>
+
+      {/* PAGINATION */}
+      <Box
+        sx={{
+          height: 50,
+          px: 1.5,
+
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+
+          backgroundColor: COLORS.panelHeader,
+          borderTop: `1px solid ${COLORS.border}`,
+        }}
+      >
+        {pageCount > 1 && (
+          <Pagination
+            page={page}
+            count={pageCount}
+            size="small"
+            onChange={(event, value) =>
+              setPage(value)
+            }
+            sx={{
+              "& .MuiPaginationItem-root": {
+                color: "#8da2b3",
+                fontSize: "11px",
+                minWidth: 28,
+                height: 28,
+              },
+
+              "& .Mui-selected": {
+                backgroundColor: COLORS.cyan,
+                color: "#071016",
+              },
+            }}
+          />
         )}
-      </AccordionDetails>
-    </Accordion>
+      </Box>
+    </Box>
   );
 }
